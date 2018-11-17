@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.google.android.things.pio.Gpio;
-import com.google.android.things.pio.GpioCallback;
-import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
 
@@ -18,8 +16,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        PeripheralManager manager = PeripheralManager.getInstance();
     }
 
     @Override

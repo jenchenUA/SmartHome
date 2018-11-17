@@ -1,9 +1,10 @@
-package com.ua.jenchen.smarthome;
+package com.ua.jenchen.smarthome.managers;
 
 import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
+import com.ua.jenchen.smarthome.callbacks.LampSwitchCallback;
 
 import java.io.IOException;
 

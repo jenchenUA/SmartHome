@@ -1,9 +1,10 @@
-package com.ua.jenchen.smarthome;
+package com.ua.jenchen.smarthome.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 import com.google.android.things.pio.Gpio;
+import com.ua.jenchen.smarthome.R;
 
 import java.io.IOException;
 

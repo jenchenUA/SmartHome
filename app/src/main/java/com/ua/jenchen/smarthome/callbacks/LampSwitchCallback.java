@@ -1,4 +1,4 @@
-package com.ua.jenchen.smarthome;
+package com.ua.jenchen.smarthome.callbacks;
 
 import android.util.Log;
 

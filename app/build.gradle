@@ -29,5 +29,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compileOnly 'com.google.android.things:androidthings:+'
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:+"
+    implementation 'nz.geek.android.things:things-drivers:1.8.0'
+    implementation 'com.google.android.things.contrib:driver-adc:2.0'
 }

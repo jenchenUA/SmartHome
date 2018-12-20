@@ -2,12 +2,14 @@ package com.ua.jenchen.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity
+@Entity(indices = {@Index(value = "uid", unique = true),
+        @Index(value = {"input", "output"}, unique = true)})
 public class LightConfiguration {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "uid")
     private String uid;

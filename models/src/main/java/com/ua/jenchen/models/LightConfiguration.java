@@ -1,13 +1,28 @@
 package com.ua.jenchen.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
 public class LightConfiguration {
 
+    @PrimaryKey
+    private int id;
+    @ColumnInfo(name = "uid")
     private String uid;
+    @ColumnInfo(name = "input")
     private String inputPin;
+    @ColumnInfo(name = "output")
     private String outputPin;
+    @ColumnInfo(name = "label")
     private String label;
 
     public LightConfiguration() {
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUid() {

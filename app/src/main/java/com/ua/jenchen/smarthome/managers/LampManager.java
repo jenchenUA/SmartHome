@@ -14,20 +14,22 @@ public class LampManager {
 
     private Gpio input;
     private Gpio output;
+    private boolean activeHigh;
 
     public LampManager(Gpio input, Gpio output, boolean activeHigh) {
         try {
             this.output = configureOutput(output, activeHigh);
             LampSwitchCallback callback = new LampSwitchCallback(this.output);
             this.input = configureInput(input, callback);
+            this.activeHigh = activeHigh;
         } catch (IOException e) {
             Log.e(LOG_TAG, "GPIO error", e);
         }
     }
 
-    public void changeStateOfLamp() {
+    public void changeStateOfLamp(boolean state) {
         try {
-            output.setValue(!output.getValue());
+            output.setValue(activeHigh == state);
         } catch (IOException e) {
             Log.e(LOG_TAG, "GPIO error", e);
         }

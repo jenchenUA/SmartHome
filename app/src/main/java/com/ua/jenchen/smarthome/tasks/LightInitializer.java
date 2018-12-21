@@ -19,7 +19,6 @@ public class LightInitializer extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
         DatabaseReference reference = firebaseDatabase
                 .getReference(AppConstants.LIGHT_CONFIGURATION_TABLE_NAME);
         reference.addValueEventListener(new LightConfigurationValueListener(context));

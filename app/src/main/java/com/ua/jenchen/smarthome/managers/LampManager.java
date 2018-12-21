@@ -19,7 +19,8 @@ public class LampManager {
     public LampManager(Gpio input, Gpio output, boolean activeHigh) {
         try {
             this.output = configureOutput(output, activeHigh);
-            LampSwitchCallback callback = new LampSwitchCallback(this.output);
+            LampSwitchCallback callback = new LampSwitchCallback(this.output,
+                    input.getName() + output.getName());
             this.input = configureInput(input, callback);
             this.activeHigh = activeHigh;
         } catch (IOException e) {

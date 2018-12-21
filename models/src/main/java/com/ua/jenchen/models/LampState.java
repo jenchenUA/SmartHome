@@ -19,6 +19,11 @@ public class LampState {
     public LampState() {
     }
 
+    public LampState(String uid, boolean state) {
+        this.uid = uid;
+        this.state = state;
+    }
+
     public int getId() {
         return id;
     }

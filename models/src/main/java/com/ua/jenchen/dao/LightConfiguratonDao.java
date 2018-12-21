@@ -17,11 +17,11 @@ public interface LightConfiguratonDao {
     @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME)
     List<LightConfiguration> getAll();
 
-    @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME + " WHERE uid LIKE :uid")
+    @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME + " WHERE uid LIKE :arg0")
     LightConfiguration getByUid(String uid);
 
     @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME +
-            " WHERE input LIKE :input AND output LIKE :output")
+            " WHERE input LIKE :arg0 AND output LIKE :arg1")
     LightConfiguration getByInputAndOutput(String input, String output);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

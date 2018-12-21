@@ -15,9 +15,9 @@ public class LampManager {
     private Gpio input;
     private Gpio output;
 
-    public LampManager(Gpio input, Gpio output) {
+    public LampManager(Gpio input, Gpio output, boolean activeHigh) {
         try {
-            this.output = configureOutput(output);
+            this.output = configureOutput(output, activeHigh);
             LampSwitchCallback callback = new LampSwitchCallback(this.output);
             this.input = configureInput(input, callback);
         } catch (IOException e) {
@@ -33,9 +33,13 @@ public class LampManager {
         }
     }
 
-    private Gpio configureOutput(Gpio gpio) throws IOException {
+    private Gpio configureOutput(Gpio gpio, boolean activeHigh) throws IOException {
         gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-        gpio.setActiveType(Gpio.ACTIVE_HIGH);
+        if (activeHigh) {
+            gpio.setActiveType(Gpio.ACTIVE_HIGH);
+        } else {
+            gpio.setActiveType(Gpio.ACTIVE_LOW);
+        }
         gpio.setValue(true);
         return gpio;
     }

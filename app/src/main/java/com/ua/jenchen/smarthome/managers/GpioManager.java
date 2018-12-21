@@ -4,11 +4,15 @@ import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
+import com.ua.jenchen.models.LightConfiguration;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class GpioManager {
 
@@ -16,9 +20,11 @@ public class GpioManager {
 
     private static GpioManager instance;
     private List<Gpio> gpios;
+    private Map<String, Object> managers;
 
     private GpioManager() {
-        gpios = new ArrayList<>();
+        gpios = new CopyOnWriteArrayList<>();
+        managers = new ConcurrentHashMap<>();
     }
 
     public static GpioManager getInstance() {
@@ -44,17 +50,35 @@ public class GpioManager {
         return result;
     }
 
-    public Optional<LampManager> makeLampManager(String inputName, String outputName) {
+    public Optional<LampManager> makeLampManager(LightConfiguration configuration) {
         Optional<LampManager> result = Optional.empty();
         try {
-            Gpio input = PeripheralManager.getInstance().openGpio(inputName);
-            Gpio output = PeripheralManager.getInstance().openGpio(outputName);
-            result = Optional.of(new LampManager(input, output));
+            Gpio input = PeripheralManager.getInstance().openGpio(configuration.getInputPin());
+            Gpio output = PeripheralManager.getInstance().openGpio(configuration.getOutputPin());
+            LampManager manager = new LampManager(input, output,
+                    configuration.isOutputHighActivation());
+            managers.put(configuration.getUid(), manager);
+            result = Optional.of(manager);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Lamp manager with input "
-                    + inputName + " and output " + outputName + " is unavailable", e);
+            Log.e(LOG_TAG, "Lamp manager with input " + configuration.getInputPin()
+                    + " and output " + configuration.getOutputPin() + " is unavailable", e);
         }
         return result;
+    }
+
+    public List<LampManager> getLampManagers() {
+        return managers.values().stream()
+                .filter(value -> value instanceof LampManager)
+                .map(value -> (LampManager) value)
+                .collect(Collectors.toList());
+    }
+
+    public <T> T getManager(String uid) {
+        return (T) managers.get(uid);
+    }
+
+    public boolean isNotManagerExist(String uid) {
+        return !managers.containsKey(uid);
     }
 
     public void closeAllGpios() {
@@ -65,5 +89,7 @@ public class GpioManager {
                 Log.e(LOG_TAG, "GPIO with name " + gpio.getName() + " can't be closed", e);
             }
         }
+        gpios.clear();
+        managers.clear();
     }
 }

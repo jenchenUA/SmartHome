@@ -5,8 +5,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = "uid", unique = true),
-        @Index(value = {"input", "output"}, unique = true)})
+@Entity(tableName = AppConstants.LIGHT_CONFIGURATION_TABLE_NAME,
+        indices = {@Index(value = "uid", unique = true),
+                @Index(value = {"input", "output"}, unique = true)})
 public class LightConfiguration {
 
     @PrimaryKey(autoGenerate = true)
@@ -19,12 +20,18 @@ public class LightConfiguration {
     private String outputPin;
     @ColumnInfo(name = "label")
     private String label;
+    @ColumnInfo(name = "output_high_activation")
+    private boolean isOutputHighActivation;
 
     public LightConfiguration() {
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUid() {
@@ -57,5 +64,13 @@ public class LightConfiguration {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public boolean isOutputHighActivation() {
+        return isOutputHighActivation;
+    }
+
+    public void setOutputHighActivation(boolean outputHighActivation) {
+        isOutputHighActivation = outputHighActivation;
     }
 }

@@ -38,12 +38,7 @@ public class LampManager {
 
     private Gpio configureOutput(Gpio gpio, boolean activeHigh) throws IOException {
         gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-        if (activeHigh) {
-            gpio.setActiveType(Gpio.ACTIVE_HIGH);
-        } else {
-            gpio.setActiveType(Gpio.ACTIVE_LOW);
-        }
-        gpio.setValue(true);
+        gpio.setActiveType(Gpio.ACTIVE_LOW);
         return gpio;
     }
 

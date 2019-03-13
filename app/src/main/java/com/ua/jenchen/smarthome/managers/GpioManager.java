@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 import com.ua.jenchen.models.LightConfiguration;
+import com.ua.jenchen.models.WarmFloorConfiguration;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,6 +63,20 @@ public class GpioManager {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Lamp manager with input " + configuration.getInputPin()
                     + " and output " + configuration.getOutputPin() + " is unavailable", e);
+        }
+        return result;
+    }
+
+    public Optional<WarmFloorManager> makeWarmFloorManager(WarmFloorConfiguration configuration) {
+        Optional<WarmFloorManager> result = Optional.empty();
+        try {
+            Gpio controlPin = PeripheralManager.getInstance().openGpio(configuration.getControlPin());
+            Gpio swithcerPin = PeripheralManager.getInstance().openGpio(configuration.getSwircherPin());
+            WarmFloorManager manager = new WarmFloorManager(controlPin, swithcerPin, configuration);
+            managers.put(configuration.getUid(), manager);
+            result = Optional.of(manager);
+        } catch (IOException e) {
+
         }
         return result;
     }

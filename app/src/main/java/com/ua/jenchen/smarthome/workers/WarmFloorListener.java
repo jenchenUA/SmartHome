@@ -28,18 +28,22 @@ public class WarmFloorListener extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         try {
+            Log.i(LOG_TAG, "Listening of warm floor temperature with label: " + manager.getLabel() + "is started");
             while (!shutdown) {
                 double temperatureInCelsius = manager.getTemperatureInCelsius();
                 Log.i(LOG_TAG, "Temperature: " + temperatureInCelsius);
                 float threshold = Float.intBitsToFloat(temperatureThreshold.get());
                 int i = BigDecimal.valueOf(temperatureInCelsius).compareTo(BigDecimal.valueOf(threshold));
                 if (i >= 0 && controlPin.getValue()) {
-                    Log.i(LOG_TAG, "Warm floor with label: " + temperatureInCelsius);
                     controlPin.setValue(false);
+                    Log.i(LOG_TAG, "Warm floor with label: " + manager.getLabel() + "is disabled cause temperature has reached threshold");
                 } else if (i < 0 && !controlPin.getValue()) {
                     controlPin.setValue(true);
+                    Log.i(LOG_TAG, "Warm floor with label: " + manager.getLabel() + "is enabled cause temperature has reached threshold");
                 }
             }
+            controlPin.setValue(false);
+            Log.i(LOG_TAG, "Listening of warm floor temperature with label: " + manager.getLabel() + "is stopped");
         } catch (Exception e) {
             Log.e(LOG_TAG, "Temperature listening error", e);
         }

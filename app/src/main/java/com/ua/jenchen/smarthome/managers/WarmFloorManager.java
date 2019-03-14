@@ -3,41 +3,44 @@ package com.ua.jenchen.smarthome.managers;
 import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
-import com.google.android.things.pio.GpioCallback;
 import com.ua.jenchen.models.AppConstants;
 import com.ua.jenchen.models.WarmFloorConfiguration;
 import com.ua.jenchen.models.WarmFloorState;
-import com.ua.jenchen.smarthome.callbacks.WarmFloorSwitchCallback;
+import com.ua.jenchen.smarthome.button.Button;
+import com.ua.jenchen.smarthome.listeners.WarmFloorButtonListener;
 import com.ua.jenchen.smarthome.services.AdcService;
 import com.ua.jenchen.smarthome.services.Ads1115Service;
 import com.ua.jenchen.smarthome.workers.WarmFloorListener;
 
 import java.io.IOException;
 
-public class WarmFloorManager {
+import static com.ua.jenchen.smarthome.button.Button.LogicState.PRESSED_WHEN_LOW;
+
+public class WarmFloorManager implements AutoCloseable {
 
     private static final String LOG_TAG = WarmFloorManager.class.getSimpleName();
 
     private Gpio controlPin;
-    private Gpio switcherPin;
+    private Button button;
     private WarmFloorConfiguration configuration;
     private AdcService adc;
     private WarmFloorListener listener;
 
-    public WarmFloorManager(Gpio controlPin, Gpio switcherPin,
-                            WarmFloorConfiguration configuration) {
-
+    public WarmFloorManager(Gpio controlPin, Gpio buttonPin, WarmFloorConfiguration configuration) {
         try {
             this.controlPin = configureControlPin(controlPin,
                     configuration.isControlPinHighActivation());
-            WarmFloorSwitchCallback callback = new WarmFloorSwitchCallback(
-                    configuration.getSwircherPin() + configuration.getControlPin());
-            this.switcherPin = configureSwitcherPin(switcherPin, callback);
+            this.button = new Button(buttonPin, PRESSED_WHEN_LOW);
+            this.button.setOnButtonEventListener(new WarmFloorButtonListener(getUid()));
             this.configuration = configuration;
             adc = Ads1115Service.getInstance();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "GPIO error", e);
+            Log.e(LOG_TAG, "Warm floor manager can't be created", e);
         }
+    }
+
+    private String getUid() {
+        return button.getName() + controlPin.getName();
     }
 
     public String getLabel() {
@@ -45,16 +48,8 @@ public class WarmFloorManager {
     }
 
     private Gpio configureControlPin(Gpio gpio, boolean activeHigh) throws IOException {
-        gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
+        gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
         gpio.setActiveType(Gpio.ACTIVE_LOW);
-        return gpio;
-    }
-
-    private Gpio configureSwitcherPin(Gpio gpio, GpioCallback callback) throws IOException {
-        gpio.setDirection(Gpio.DIRECTION_IN);
-        gpio.setActiveType(Gpio.ACTIVE_HIGH);
-        gpio.setEdgeTriggerType(Gpio.EDGE_FALLING);
-        gpio.registerGpioCallback(callback);
         return gpio;
     }
 
@@ -82,5 +77,10 @@ public class WarmFloorManager {
             result += measuredTemperature;
         }
         return (result / configuration.getCountOfMeasures()) - AppConstants.ZERO_TEMPERATURE;
+    }
+
+    @Override
+    public void close() throws Exception {
+        button.close();
     }
 }

@@ -16,7 +16,7 @@ public class WarmFloorStateValueListener implements ValueEventListener {
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
             WarmFloorState value = snapshot.getValue(WarmFloorState.class);
             if (value != null) {
-                WarmFloorManager manager = GpioManager.getInstance().getManager(value.getUid());
+                WarmFloorManager manager = GpioManager.getInstance().getWarmFloorManager(value.getUid());
                 if (manager != null) {
                     manager.setState(value);
                 }

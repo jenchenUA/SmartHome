@@ -16,7 +16,7 @@ public class LampStateValueEventListener implements ValueEventListener {
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
             LampState value = snapshot.getValue(LampState.class);
             if (value != null) {
-                LampManager manager = GpioManager.getInstance().getManager(value.getUid());
+                LampManager manager = GpioManager.getInstance().getLampManager(value.getUid());
                 if (manager != null) {
                     manager.changeStateOfLamp(value.getState());
                 }

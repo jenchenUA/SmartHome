@@ -29,6 +29,7 @@ public class GpioManager {
         peripheralManager = PeripheralManager.getInstance();
         gpios = new CopyOnWriteArrayList<>();
         lampManagers = new ConcurrentHashMap<>();
+        floorManagers = new ConcurrentHashMap<>();
     }
 
     public static GpioManager getInstance() {
@@ -45,7 +46,7 @@ public class GpioManager {
     public Optional<Gpio> getGpio(String name) {
         Optional<Gpio> result = Optional.empty();
         try {
-            Gpio gpio = PeripheralManager.getInstance().openGpio(name);
+            Gpio gpio = peripheralManager.openGpio(name);
             gpios.add(gpio);
             result = Optional.of(gpio);
         } catch (IOException e) {
@@ -59,6 +60,7 @@ public class GpioManager {
         try {
             Gpio buttonPin = peripheralManager.openGpio(configuration.getButtonPin());
             Gpio controlPin = peripheralManager.openGpio(configuration.getControlPin());
+            gpios.add(controlPin);
             LampManager manager = new LampManager(buttonPin, controlPin, configuration);
             lampManagers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
@@ -73,8 +75,9 @@ public class GpioManager {
         Optional<WarmFloorManager> result = Optional.empty();
         try {
             Gpio controlPin = peripheralManager.openGpio(configuration.getControlPin());
-            Gpio swithcerPin = peripheralManager.openGpio(configuration.getSwircherPin());
-            WarmFloorManager manager = new WarmFloorManager(controlPin, swithcerPin, configuration);
+            gpios.add(controlPin);
+            Gpio buttonPin = peripheralManager.openGpio(configuration.getSwircherPin());
+            WarmFloorManager manager = new WarmFloorManager(controlPin, buttonPin, configuration);
             floorManagers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
         } catch (IOException e) {
@@ -87,8 +90,12 @@ public class GpioManager {
         return new ArrayList<>(lampManagers.values());
     }
 
-    public <T> T getManager(String uid) {
-        return (T) lampManagers.get(uid);
+    public LampManager getLampManager(String uid) {
+        return lampManagers.get(uid);
+    }
+
+    public WarmFloorManager getWarmFloorManager(String uid) {
+        return floorManagers.get(uid);
     }
 
     public boolean isNotManagerExist(String uid) {
@@ -97,6 +104,7 @@ public class GpioManager {
 
     public void closeAllGpios() {
         lampManagers.values().forEach(this::close);
+        floorManagers.values().forEach(this::close);
         gpios.forEach(this::close);
         gpios.clear();
         lampManagers.clear();

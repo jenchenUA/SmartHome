@@ -8,12 +8,12 @@ import com.ua.jenchen.models.LightConfiguration;
 import com.ua.jenchen.models.WarmFloorConfiguration;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 public class GpioManager {
 
@@ -21,11 +21,14 @@ public class GpioManager {
 
     private static GpioManager instance;
     private List<Gpio> gpios;
-    private Map<String, Object> managers;
+    private Map<String, LampManager> lampManagers;
+    private Map<String, WarmFloorManager> floorManagers;
+    private PeripheralManager peripheralManager;
 
     private GpioManager() {
+        peripheralManager = PeripheralManager.getInstance();
         gpios = new CopyOnWriteArrayList<>();
-        managers = new ConcurrentHashMap<>();
+        lampManagers = new ConcurrentHashMap<>();
     }
 
     public static GpioManager getInstance() {
@@ -54,14 +57,14 @@ public class GpioManager {
     public Optional<LampManager> makeLampManager(LightConfiguration configuration) {
         Optional<LampManager> result = Optional.empty();
         try {
-            Gpio input = PeripheralManager.getInstance().openGpio(configuration.getInputPin());
-            Gpio output = PeripheralManager.getInstance().openGpio(configuration.getOutputPin());
-            LampManager manager = new LampManager(input, output);
-            managers.put(configuration.getUid(), manager);
+            Gpio buttonPin = peripheralManager.openGpio(configuration.getButtonPin());
+            Gpio controlPin = peripheralManager.openGpio(configuration.getControlPin());
+            LampManager manager = new LampManager(buttonPin, controlPin, configuration);
+            lampManagers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Lamp manager with input " + configuration.getInputPin()
-                    + " and output " + configuration.getOutputPin() + " is unavailable", e);
+            Log.e(LOG_TAG, "Lamp manager with input " + configuration.getButtonPin()
+                    + " and output " + configuration.getControlPin() + " is unavailable", e);
         }
         return result;
     }
@@ -69,10 +72,10 @@ public class GpioManager {
     public Optional<WarmFloorManager> makeWarmFloorManager(WarmFloorConfiguration configuration) {
         Optional<WarmFloorManager> result = Optional.empty();
         try {
-            Gpio controlPin = PeripheralManager.getInstance().openGpio(configuration.getControlPin());
-            Gpio swithcerPin = PeripheralManager.getInstance().openGpio(configuration.getSwircherPin());
+            Gpio controlPin = peripheralManager.openGpio(configuration.getControlPin());
+            Gpio swithcerPin = peripheralManager.openGpio(configuration.getSwircherPin());
             WarmFloorManager manager = new WarmFloorManager(controlPin, swithcerPin, configuration);
-            managers.put(configuration.getUid(), manager);
+            floorManagers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
         } catch (IOException e) {
 
@@ -81,29 +84,29 @@ public class GpioManager {
     }
 
     public List<LampManager> getLampManagers() {
-        return managers.values().stream()
-                .filter(value -> value instanceof LampManager)
-                .map(value -> (LampManager) value)
-                .collect(Collectors.toList());
+        return new ArrayList<>(lampManagers.values());
     }
 
     public <T> T getManager(String uid) {
-        return (T) managers.get(uid);
+        return (T) lampManagers.get(uid);
     }
 
     public boolean isNotManagerExist(String uid) {
-        return !managers.containsKey(uid);
+        return !lampManagers.containsKey(uid);
     }
 
     public void closeAllGpios() {
-        for (Gpio gpio : gpios) {
-            try {
-                gpio.close();
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "GPIO with name " + gpio.getName() + " can't be closed", e);
-            }
-        }
+        lampManagers.values().forEach(this::close);
+        gpios.forEach(this::close);
         gpios.clear();
-        managers.clear();
+        lampManagers.clear();
+    }
+
+    private void close(AutoCloseable closeable) {
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Can't be closed object: " + closeable);
+        }
     }
 }

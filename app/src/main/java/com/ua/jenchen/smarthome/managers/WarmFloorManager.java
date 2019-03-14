@@ -40,6 +40,9 @@ public class WarmFloorManager {
         }
     }
 
+    public String getLabel() {
+        return configuration.getLabel();
+    }
 
     private Gpio configureControlPin(Gpio gpio, boolean activeHigh) throws IOException {
         gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);

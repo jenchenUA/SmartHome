@@ -14,10 +14,10 @@ public class LightConfiguration {
     private int id;
     @ColumnInfo(name = "uid")
     private String uid;
-    @ColumnInfo(name = "input")
-    private String inputPin;
-    @ColumnInfo(name = "output")
-    private String outputPin;
+    @ColumnInfo(name = "buttonPin")
+    private String buttonPin;
+    @ColumnInfo(name = "controlPin")
+    private String controlPin;
     @ColumnInfo(name = "label")
     private String label;
     @ColumnInfo(name = "output_high_activation")
@@ -42,20 +42,20 @@ public class LightConfiguration {
         this.uid = uid;
     }
 
-    public String getInputPin() {
-        return inputPin;
+    public String getButtonPin() {
+        return buttonPin;
     }
 
-    public void setInputPin(String inputPin) {
-        this.inputPin = inputPin;
+    public void setButtonPin(String buttonPin) {
+        this.buttonPin = buttonPin;
     }
 
-    public String getOutputPin() {
-        return outputPin;
+    public String getControlPin() {
+        return controlPin;
     }
 
-    public void setOutputPin(String outputPin) {
-        this.outputPin = outputPin;
+    public void setControlPin(String controlPin) {
+        this.controlPin = controlPin;
     }
 
     public String getLabel() {

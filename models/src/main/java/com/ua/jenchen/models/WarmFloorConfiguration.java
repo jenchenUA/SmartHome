@@ -29,6 +29,8 @@ public class WarmFloorConfiguration {
     private int countOfMeasures;
     @ColumnInfo(name = "control_pin_high_activation")
     private boolean isControlPinHighActivation;
+    @ColumnInfo(name = "label")
+    private String label;
 
     public WarmFloorConfiguration() {
     }
@@ -115,5 +117,13 @@ public class WarmFloorConfiguration {
 
     public void setControlPinHighActivation(boolean controlPinHighActivation) {
         isControlPinHighActivation = controlPinHighActivation;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

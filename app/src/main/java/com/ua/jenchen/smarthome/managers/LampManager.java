@@ -3,8 +3,8 @@ package com.ua.jenchen.smarthome.managers;
 import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
-import com.google.android.things.pio.GpioCallback;
-import com.ua.jenchen.smarthome.callbacks.LampSwitchCallback;
+import com.ua.jenchen.smarthome.button.Button;
+import com.ua.jenchen.smarthome.listeners.LightButtonListener;
 
 import java.io.IOException;
 
@@ -12,41 +12,34 @@ public class LampManager {
 
     private static final String LOG_TAG = LampManager.class.getSimpleName();
 
-    private Gpio input;
-    private Gpio output;
-    private boolean activeHigh;
+    private Button button;
+    private Gpio controlPin;
 
-    public LampManager(Gpio input, Gpio output, boolean activeHigh) {
+    public LampManager(Gpio buttonPin, Gpio controlPin) {
         try {
-            this.output = configureOutput(output, activeHigh);
-            LampSwitchCallback callback = new LampSwitchCallback(this.output,
-                    input.getName() + output.getName());
-            this.input = configureInput(input, callback);
-            this.activeHigh = activeHigh;
+            this.controlPin = configureOutput(controlPin);
+            button = new Button(buttonPin, Button.LogicState.PRESSED_WHEN_LOW);
+            button.setOnButtonEventListener(new LightButtonListener(getUid(), controlPin));
         } catch (IOException e) {
-            Log.e(LOG_TAG, "GPIO error", e);
+            Log.e(LOG_TAG, "Lamp manager can't be created", e);
         }
+    }
+
+    private String getUid() {
+        return button.getName() + controlPin.getName();
     }
 
     public void changeStateOfLamp(boolean state) {
         try {
-            output.setValue(activeHigh == state);
+            controlPin.setValue(state);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "GPIO error", e);
+            Log.e(LOG_TAG, "State of lamp can't be changed", e);
         }
     }
 
-    private Gpio configureOutput(Gpio gpio, boolean activeHigh) throws IOException {
+    private Gpio configureOutput(Gpio gpio) throws IOException {
         gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
         gpio.setActiveType(Gpio.ACTIVE_LOW);
-        return gpio;
-    }
-
-    private Gpio configureInput(Gpio gpio, GpioCallback callback) throws IOException {
-        gpio.setDirection(Gpio.DIRECTION_IN);
-        gpio.setActiveType(Gpio.ACTIVE_HIGH);
-        gpio.setEdgeTriggerType(Gpio.EDGE_FALLING);
-        gpio.registerGpioCallback(callback);
         return gpio;
     }
 }

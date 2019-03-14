@@ -31,8 +31,6 @@ public class LightConfigurationValueListener implements ValueEventListener {
     }
 
     private void configureLightManager(LightConfiguration configuration) {
-//        new Thread(() -> DatabaseHolder.getInstance(context).getDatabase()
-//                .lightConfiguratonDao().insert(configuration)).start();
         GpioManager.getInstance().makeLampManager(configuration);
     }
 

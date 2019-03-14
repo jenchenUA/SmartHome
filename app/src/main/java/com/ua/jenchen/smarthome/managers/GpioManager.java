@@ -56,8 +56,7 @@ public class GpioManager {
         try {
             Gpio input = PeripheralManager.getInstance().openGpio(configuration.getInputPin());
             Gpio output = PeripheralManager.getInstance().openGpio(configuration.getOutputPin());
-            LampManager manager = new LampManager(input, output,
-                    configuration.isOutputHighActivation());
+            LampManager manager = new LampManager(input, output);
             managers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
         } catch (IOException e) {

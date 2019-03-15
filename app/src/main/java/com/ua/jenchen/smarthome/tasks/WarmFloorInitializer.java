@@ -1,6 +1,5 @@
 package com.ua.jenchen.smarthome.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.firebase.database.DatabaseReference;
@@ -11,15 +10,10 @@ import com.ua.jenchen.smarthome.listeners.WarmFloorStateValueListener;
 
 public class WarmFloorInitializer extends AsyncTask<Void, Void, Void> {
 
-    private Context context;
-
-    public WarmFloorInitializer(Context context) {
-        this.context = context;
-    }
-
     @Override
     protected Void doInBackground(Void... voids) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.setPersistenceEnabled(true);
         DatabaseReference reference = firebaseDatabase.getReference(AppConstants.WARM_FLOOR_STATE_TABLE_NAME);
         reference.setValue(null);
         reference.addValueEventListener(new WarmFloorStateValueListener());

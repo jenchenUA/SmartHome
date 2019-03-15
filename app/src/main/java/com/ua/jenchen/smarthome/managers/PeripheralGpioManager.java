@@ -45,6 +45,10 @@ public class PeripheralGpioManager {
         }
     }
 
+    public boolean isProviderExists(int address) {
+        return gpioProviders.containsKey(address);
+    }
+
     public Optional<Object> getGpioProvider(int address) {
         return Optional.ofNullable(gpioProviders.get(address));
     }

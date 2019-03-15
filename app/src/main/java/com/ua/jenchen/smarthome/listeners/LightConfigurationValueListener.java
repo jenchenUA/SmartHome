@@ -1,6 +1,5 @@
 package com.ua.jenchen.smarthome.listeners;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -13,12 +12,6 @@ import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class LightConfigurationValueListener implements ValueEventListener {
-
-    private Context context;
-
-    public LightConfigurationValueListener(Context context) {
-        this.context = context;
-    }
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

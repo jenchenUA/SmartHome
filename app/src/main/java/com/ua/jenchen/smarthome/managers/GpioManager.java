@@ -134,7 +134,7 @@ public class GpioManager {
     }
 
     public boolean isNotManagerExist(String uid) {
-        return !lampManagers.containsKey(uid);
+        return !lampManagers.containsKey(uid) && !floorManagers.containsKey(uid);
     }
 
     public void closeAllGpios() {

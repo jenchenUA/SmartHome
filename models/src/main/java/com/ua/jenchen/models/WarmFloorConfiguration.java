@@ -31,6 +31,8 @@ public class WarmFloorConfiguration {
     private boolean isControlPinHighActivation;
     @ColumnInfo(name = "label")
     private String label;
+    @ColumnInfo(name = "gpio_address")
+    private int gpioAddress;
 
     public WarmFloorConfiguration() {
     }
@@ -125,5 +127,13 @@ public class WarmFloorConfiguration {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public int getGpioAddress() {
+        return gpioAddress;
+    }
+
+    public void setGpioAddress(int gpioAddress) {
+        this.gpioAddress = gpioAddress;
     }
 }

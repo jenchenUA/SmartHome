@@ -14,12 +14,14 @@ public class LightConfiguration {
     private int id;
     @ColumnInfo(name = "uid")
     private String uid;
-    @ColumnInfo(name = "buttonPin")
+    @ColumnInfo(name = "button_pin")
     private String buttonPin;
-    @ColumnInfo(name = "controlPin")
+    @ColumnInfo(name = "control_pin")
     private String controlPin;
     @ColumnInfo(name = "label")
     private String label;
+    @ColumnInfo(name = "gpio_address")
+    private int gpioAddress;
     @ColumnInfo(name = "output_high_activation")
     private boolean isOutputHighActivation;
 
@@ -72,5 +74,13 @@ public class LightConfiguration {
 
     public void setOutputHighActivation(boolean outputHighActivation) {
         isOutputHighActivation = outputHighActivation;
+    }
+
+    public int getGpioAddress() {
+        return gpioAddress;
+    }
+
+    public void setGpioAddress(int gpioAddress) {
+        this.gpioAddress = gpioAddress;
     }
 }

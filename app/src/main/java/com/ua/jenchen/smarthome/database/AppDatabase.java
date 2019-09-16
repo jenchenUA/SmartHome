@@ -1,6 +1,6 @@
 package com.ua.jenchen.smarthome.database;
 
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.RoomDatabase;
 
 import com.ua.jenchen.dao.LightConfiguratonDao;
 

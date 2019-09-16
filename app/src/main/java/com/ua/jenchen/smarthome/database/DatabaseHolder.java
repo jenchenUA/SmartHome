@@ -1,6 +1,6 @@
 package com.ua.jenchen.smarthome.database;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.Context;
 
 import static com.ua.jenchen.models.AppConstants.DATABASE_NAME;

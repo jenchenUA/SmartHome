@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
         lightStateReference.setValue(null);
         lightStateReference.addValueEventListener(new LampStateValueEventListener());
 
-        LightInitializer lightInitializer = new LightInitializer(getApplicationContext());
+        LightInitializer lightInitializer = new LightInitializer();
         lightInitializer.execute();
     }
 

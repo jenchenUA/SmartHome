@@ -17,7 +17,7 @@
 package com.ua.jenchen.smarthome.button;
 
 import android.os.Handler;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 import android.util.Log;
 import android.view.ViewConfiguration;
 

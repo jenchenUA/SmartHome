@@ -1,1 +1,1 @@
-include ':app', ':smarthomeclient', ':models'
+include ':frontend', ':app', ':smarthomeclient', ':models'

@@ -28,6 +28,7 @@ android {
 
 dependencies {
     implementation project(path: ':models')
+    implementation project(':frontend')
     compileOnly 'com.google.android.things:androidthings:1.0'
     annotationProcessor 'androidx.room:room-compiler:2.1.0'
 //    implementation 'com.google.android.things.contrib:driver-button:1.0'
@@ -45,3 +46,12 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+task copyFiles(type: Copy) {
+    delete './src/main/assets/'
+    mkdir './src/main/assets/'
+    from '../frontend/dist/smart-home-front/'
+    into './src/main/assets/'
+}
+
+preBuild.dependsOn(copyFiles)

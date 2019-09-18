@@ -1,13 +1,13 @@
 package com.ua.jenchen.smarthome.listeners;
 
-import androidx.annotation.NonNull;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.ua.jenchen.models.LampState;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 import com.ua.jenchen.smarthome.managers.LampManager;
+
+import androidx.annotation.NonNull;
 
 public class LampStateValueEventListener implements ValueEventListener {
 

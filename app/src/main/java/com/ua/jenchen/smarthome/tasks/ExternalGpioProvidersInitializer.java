@@ -12,7 +12,6 @@ public class ExternalGpioProvidersInitializer extends AsyncTask<Void, Void, Void
     @Override
     protected Void doInBackground(Void... voids) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
         DatabaseReference reference = firebaseDatabase
                 .getReference(AppConstants.GPIO_EXPANDER_CONFIGURATION_TABLE_NAME);
         reference.addValueEventListener(new ExpernalGpioProviderConfigurationValueListener());

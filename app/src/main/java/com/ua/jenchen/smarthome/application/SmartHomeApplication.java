@@ -3,6 +3,9 @@ package com.ua.jenchen.smarthome.application;
 import android.app.Application;
 import android.util.Log;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.ua.jenchen.smarthome.server.Server;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,21 +16,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import io.javalin.Javalin;
-import io.javalin.http.staticfiles.Location;
-
 public class SmartHomeApplication extends Application {
 
     private static final String LOG_TAG = SmartHomeApplication.class.getSimpleName();
     private static final String FRONT_END_FOLDER_NAME = "front";
 
+    private static Server server;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         copyFrontEndToInternalStorage();
         File staticResourcesFolder = new File(getApplicationContext().getFilesDir(), FRONT_END_FOLDER_NAME);
-        Javalin.create(config -> config.addStaticFiles(staticResourcesFolder.getPath(), Location.EXTERNAL))
-                .start(8080);
+        if (staticResourcesFolder.exists()) {
+            server = new Server(8080, staticResourcesFolder.getPath());
+        } else {
+            server = new Server(8080);
+        }
+        server.run();
     }
 
     private void copyFrontEndToInternalStorage() {

@@ -13,7 +13,6 @@ public class WarmFloorInitializer extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
         DatabaseReference reference = firebaseDatabase.getReference(AppConstants.WARM_FLOOR_STATE_TABLE_NAME);
         reference.setValue(null);
         reference.addValueEventListener(new WarmFloorStateValueListener());

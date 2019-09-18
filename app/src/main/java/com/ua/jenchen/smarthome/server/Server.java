@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
+import io.javalin.core.util.CorsPlugin;
 import io.javalin.http.staticfiles.Location;
 
 import static io.javalin.apibuilder.ApiBuilder.path;
@@ -33,6 +34,7 @@ public class Server {
 
     public void run() {
         server = Javalin.create(getConfig()).start(port);
+        CorsPlugin.forAllOrigins().apply(server);
         server.routes(() -> {
             path("light", () -> {
                 path("config", () -> {

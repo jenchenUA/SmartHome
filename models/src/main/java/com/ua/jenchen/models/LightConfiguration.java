@@ -37,11 +37,7 @@ public class LightConfiguration {
     }
 
     public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
+        return buttonPin + controlPin;
     }
 
     public String getButtonPin() {

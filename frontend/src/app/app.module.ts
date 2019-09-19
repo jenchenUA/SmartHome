@@ -15,6 +15,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {HttpClientModule} from "@angular/common/http";
 import {LightConfigurationService} from "./light-configuration/service/light-configuration.service";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import {LightConfigurationService} from "./light-configuration/service/light-con
     MatButtonModule,
     MatCardModule,
     MatGridListModule,
+    MatSnackBarModule,
     HttpClientModule
   ],
   providers: [],

@@ -1,8 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {LightConfiguration} from "../model/light-configuration";
-import {Observable} from "rxjs";
-import {LightConfigurationComponent} from "../light-configuration.component";
 import {environment} from "../../../environments/environment";
 
 @Injectable({

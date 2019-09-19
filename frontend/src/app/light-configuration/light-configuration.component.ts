@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {LightConfiguration} from "./model/light-configuration";
 import {LightConfigurationService} from "./service/light-configuration.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-light-configuration',
@@ -9,11 +10,12 @@ import {LightConfigurationService} from "./service/light-configuration.service";
 })
 export class LightConfigurationComponent implements OnInit {
 
-  configuration = new LightConfiguration("","", "", "", 0);
-  done = false;
+  configuration = new LightConfiguration("", "", "", "", 0);
   configurationNotSame = true;
+  @ViewChild("form", {static: false}) form: any;
 
-  constructor(private configurationService: LightConfigurationService) { }
+  constructor(private configurationService: LightConfigurationService, private snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
   }
@@ -27,10 +29,23 @@ export class LightConfigurationComponent implements OnInit {
       this.configurationService.createLightConfiguration(this.configuration)
         .subscribe(
           () => {
-            this.done = true;
+            this.showSnackBar("Created!");
+            this.resetForm();
           },
           error => console.log(error)
         )
     }
+  }
+
+  resetForm() {
+    this.form.reset();
+    Object.keys(this.form.form.controls).forEach(key => {
+      this.form.form.controls[key].clearValidators();
+      this.form.form.controls[key].updateValueAndValidity();
+    });
+  }
+
+  showSnackBar(message: string) {
+    this.snackBar.open(message, "", {duration: 2000})
   }
 }

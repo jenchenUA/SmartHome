@@ -4,7 +4,7 @@
       <p class="light-card-title">Light switcher configuration</p>
     </mat-card-title>
     <mat-card-content>
-      <form (ngSubmit)="create()">
+      <form (ngSubmit)="create()" #form="ngForm">
         <div class="form-group">
           <mat-form-field appearance="standard" class="seventy-width-field">
             <mat-label>Button Pin</mat-label>

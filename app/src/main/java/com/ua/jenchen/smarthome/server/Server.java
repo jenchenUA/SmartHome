@@ -1,14 +1,14 @@
 package com.ua.jenchen.smarthome.server;
 
-import android.content.Context;
-
-import com.ua.jenchen.smarthome.database.DatabaseHolder;
+import com.ua.jenchen.smarthome.application.SmartHomeApplication;
 import com.ua.jenchen.smarthome.server.controllers.LightConfigurationController;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import javax.inject.Inject;
 
 import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
@@ -23,16 +23,16 @@ public class Server {
     private static Javalin server;
     private String staticResourcesPath;
     private int port;
-    private LightConfigurationController lightConfigurationController;
+    @Inject
+    LightConfigurationController lightConfigurationController;
 
-    public Server(int port, Context context) {
+    public Server(int port) {
+        SmartHomeApplication.appComponent.inject(this);
         this.port = port;
-        DatabaseHolder databaseHolder = DatabaseHolder.getInstance(context);
-        this.lightConfigurationController = new LightConfigurationController(databaseHolder.getDatabase());
     }
 
-    public Server(int port, Context context, String staticResourcesPath) {
-        this(port, context);
+    public Server(int port, String staticResourcesPath) {
+        this(port);
         this.staticResourcesPath = staticResourcesPath;
     }
 

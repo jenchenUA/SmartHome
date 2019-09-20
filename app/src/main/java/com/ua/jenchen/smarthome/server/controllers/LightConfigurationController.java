@@ -7,6 +7,8 @@ import com.ua.jenchen.models.AppConstants;
 import com.ua.jenchen.models.LightConfiguration;
 import com.ua.jenchen.smarthome.database.AppDatabase;
 
+import javax.inject.Inject;
+
 import io.javalin.http.Context;
 
 public class LightConfigurationController {
@@ -19,6 +21,7 @@ public class LightConfigurationController {
         this.databaseReference = database.getReference(AppConstants.LIGHT_CONFIGURATION_TABLE_NAME);
     }
 
+    @Inject
     public LightConfigurationController(AppDatabase database) {
         this();
         configuratonDao = database.lightConfiguratonDao();

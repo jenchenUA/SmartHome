@@ -4,6 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.ua.jenchen.smarthome.di.AppComponent;
+import com.ua.jenchen.smarthome.di.DaggerAppComponent;
 import com.ua.jenchen.smarthome.server.Server;
 
 import java.io.File;
@@ -21,20 +23,29 @@ public class SmartHomeApplication extends Application {
     private static final String LOG_TAG = SmartHomeApplication.class.getSimpleName();
     private static final String FRONT_END_FOLDER_NAME = "front";
 
+    public static AppComponent appComponent;
     private static Server server;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        initDagger();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         copyFrontEndToInternalStorage();
         File staticResourcesFolder = new File(getApplicationContext().getFilesDir(), FRONT_END_FOLDER_NAME);
         if (staticResourcesFolder.exists()) {
-            server = new Server(8080, getApplicationContext(), staticResourcesFolder.getPath());
+            server = new Server(8080, staticResourcesFolder.getPath());
         } else {
-            server = new Server(8080, getApplicationContext());
+            server = new Server(8080);
         }
         server.run();
+    }
+
+    private void initDagger() {
+       appComponent = DaggerAppComponent.builder()
+               .application(this)
+               .context(getApplicationContext())
+               .build();
     }
 
     private void copyFrontEndToInternalStorage() {

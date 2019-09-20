@@ -1,5 +1,8 @@
 package com.ua.jenchen.smarthome.server;
 
+import android.content.Context;
+
+import com.ua.jenchen.smarthome.database.DatabaseHolder;
 import com.ua.jenchen.smarthome.server.controllers.LightConfigurationController;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,13 +25,14 @@ public class Server {
     private int port;
     private LightConfigurationController lightConfigurationController;
 
-    public Server(int port) {
+    public Server(int port, Context context) {
         this.port = port;
-        this.lightConfigurationController = new LightConfigurationController();
+        DatabaseHolder databaseHolder = DatabaseHolder.getInstance(context);
+        this.lightConfigurationController = new LightConfigurationController(databaseHolder.getDatabase());
     }
 
-    public Server(int port, String staticResourcesPath) {
-        this(port);
+    public Server(int port, Context context, String staticResourcesPath) {
+        this(port, context);
         this.staticResourcesPath = staticResourcesPath;
     }
 

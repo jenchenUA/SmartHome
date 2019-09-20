@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = AppConstants.LIGHT_CONFIGURATION_TABLE_NAME,
         indices = {@Index(value = "uid", unique = true),
-                @Index(value = {"input", "output"}, unique = true)})
+                @Index(value = {"button_pin", "control_pin"}, unique = true)})
 public class LightConfiguration {
 
     @PrimaryKey(autoGenerate = true)
@@ -37,7 +37,11 @@ public class LightConfiguration {
     }
 
     public String getUid() {
-        return buttonPin + controlPin;
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getButtonPin() {

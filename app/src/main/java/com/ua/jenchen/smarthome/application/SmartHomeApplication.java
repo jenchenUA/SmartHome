@@ -30,9 +30,9 @@ public class SmartHomeApplication extends Application {
         copyFrontEndToInternalStorage();
         File staticResourcesFolder = new File(getApplicationContext().getFilesDir(), FRONT_END_FOLDER_NAME);
         if (staticResourcesFolder.exists()) {
-            server = new Server(8080, staticResourcesFolder.getPath());
+            server = new Server(8080, getApplicationContext(), staticResourcesFolder.getPath());
         } else {
-            server = new Server(8080);
+            server = new Server(8080, getApplicationContext());
         }
         server.run();
     }

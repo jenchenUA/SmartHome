@@ -1,10 +1,11 @@
-package com.ua.jenchen.dao;
+package com.ua.jenchen.smarthome.database.dao;
 
 import com.ua.jenchen.models.AppConstants;
 import com.ua.jenchen.models.LightConfiguration;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -17,11 +18,14 @@ public interface LightConfiguratonDao {
     @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME)
     List<LightConfiguration> getAll();
 
-    @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME + " WHERE uid LIKE :arg0")
+    @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME)
+    LiveData<List<LightConfiguration>> getAllAsLiveData();
+
+    @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME + " WHERE uid LIKE :uid")
     LightConfiguration getByUid(String uid);
 
     @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME +
-            " WHERE button_pin LIKE :arg0 AND control_pin LIKE :arg1")
+            " WHERE button_pin LIKE :buttonPin AND control_pin LIKE :controlPin")
     LightConfiguration getByButtonPinAndControlPin(String buttonPin, String controlPin);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -1,7 +1,7 @@
 package com.ua.jenchen.smarthome.database;
 
-import com.ua.jenchen.dao.LightConfiguratonDao;
 import com.ua.jenchen.models.LightConfiguration;
+import com.ua.jenchen.smarthome.database.dao.LightConfiguratonDao;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

@@ -1,6 +1,5 @@
 package com.ua.jenchen.smarthome.managers;
 
-import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
@@ -19,6 +18,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import androidx.annotation.Nullable;
+
 public class GpioManager {
 
     private static final String LOG_TAG = GpioManager.class.getSimpleName();
@@ -30,23 +31,12 @@ public class GpioManager {
     private PeripheralManager peripheralManager;
     private PeripheralGpioManager peripheralGpioManager;
 
-    private GpioManager() {
+    public GpioManager(PeripheralGpioManager manager) {
         peripheralManager = PeripheralManager.getInstance();
-        peripheralGpioManager = PeripheralGpioManager.getInstance();
+        peripheralGpioManager = manager;
         gpios = new CopyOnWriteArrayList<>();
         lampManagers = new ConcurrentHashMap<>();
         floorManagers = new ConcurrentHashMap<>();
-    }
-
-    public static GpioManager getInstance() {
-        if (instance == null) {
-            synchronized (GpioManager.class) {
-                if (instance == null) {
-                    instance = new GpioManager();
-                }
-            }
-        }
-        return instance;
     }
 
     public Optional<Gpio> getGpio(String name) {

@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     @Inject
     LightConfigurationService lightConfigurationService;
+    @Inject
+    GpioManager gpioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        GpioManager.getInstance().closeAllGpios();
+        gpioManager.closeAllGpios();
         super.onDestroy();
     }
 }

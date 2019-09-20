@@ -19,7 +19,7 @@ public class PeripheralGpioManager {
 
     private Map<Integer, Object> gpioProviders;
 
-    private PeripheralGpioManager() {
+    public PeripheralGpioManager() {
         this.gpioProviders = new ConcurrentHashMap<>();
         gpioProviders.put(0, PeripheralManager.getInstance());
     }

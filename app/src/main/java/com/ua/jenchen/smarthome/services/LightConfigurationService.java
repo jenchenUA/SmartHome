@@ -11,19 +11,21 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LightConfigurationService {
 
     private LightConfiguratonDao dao;
+    private GpioManager gpioManager;
 
     @Inject
-    public LightConfigurationService(LightConfiguratonDao dao) {
+    public LightConfigurationService(LightConfiguratonDao dao, GpioManager gpioManager) {
         this.dao = dao;
+        this.gpioManager = gpioManager;
     }
 
     public void create(LightConfiguration configuration) {
         dao.insert(configuration);
-        GpioManager.getInstance().makeLampManager(configuration);
+        gpioManager.makeLampManager(configuration);
     }
 
     public void runSavedConfigurations(AppCompatActivity activity) {
         dao.getAllAsLiveData().observe(activity,
-                lightConfigurations -> lightConfigurations.forEach(GpioManager.getInstance()::makeLampManager));
+                lightConfigurations -> lightConfigurations.forEach(gpioManager::makeLampManager));
     }
 }

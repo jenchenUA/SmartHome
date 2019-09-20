@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.models.AppConstants;
-import com.ua.jenchen.smarthome.listeners.ExpernalGpioProviderConfigurationValueListener;
 
 public class ExternalGpioProvidersInitializer extends AsyncTask<Void, Void, Void> {
 
@@ -14,7 +13,7 @@ public class ExternalGpioProvidersInitializer extends AsyncTask<Void, Void, Void
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference reference = firebaseDatabase
                 .getReference(AppConstants.GPIO_EXPANDER_CONFIGURATION_TABLE_NAME);
-        reference.addValueEventListener(new ExpernalGpioProviderConfigurationValueListener());
+//        reference.addValueEventListener(new ExpernalGpioProviderConfigurationValueListener());
         return null;
     }
 }

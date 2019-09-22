@@ -13,7 +13,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 @Dao
-public interface LightConfiguratonDao {
+public interface LightConfigurationDao {
 
     @Query("SELECT * FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME)
     List<LightConfiguration> getAll();

@@ -9,6 +9,7 @@ import com.ua.jenchen.smarthome.di.modules.PeripheralModule;
 import com.ua.jenchen.smarthome.di.modules.ServerModule;
 import com.ua.jenchen.smarthome.di.modules.ServiceModule;
 import com.ua.jenchen.smarthome.listeners.LampStateValueEventListener;
+import com.ua.jenchen.smarthome.listeners.LightButtonListener;
 import com.ua.jenchen.smarthome.listeners.WarmFloorConfigurationValueListener;
 import com.ua.jenchen.smarthome.listeners.WarmFloorStateValueListener;
 import com.ua.jenchen.smarthome.server.Server;
@@ -31,6 +32,8 @@ public interface AppComponent {
     void inject(WarmFloorConfigurationValueListener warmFloorConfigurationValueListener);
 
     void inject(WarmFloorStateValueListener warmFloorStateValueListener);
+
+    void inject(LightButtonListener lightButtonListener);
 
     @Component.Builder
     interface Builder {

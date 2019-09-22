@@ -2,10 +2,11 @@ package com.ua.jenchen.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = AppConstants.LIGHT_CONFIGURATION_TABLE_NAME,
+@Entity(tableName = AppConstants.LIGHT_STATE_TABLE_NAME,
         indices = {@Index(value = "uid", unique = true)})
 public class LampState {
 
@@ -19,6 +20,7 @@ public class LampState {
     public LampState() {
     }
 
+    @Ignore
     public LampState(String uid, boolean state) {
         this.uid = uid;
         this.state = state;

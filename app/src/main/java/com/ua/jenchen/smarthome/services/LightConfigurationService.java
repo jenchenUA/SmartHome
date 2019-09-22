@@ -1,8 +1,12 @@
 package com.ua.jenchen.smarthome.services;
 
+import com.ua.jenchen.models.LampState;
 import com.ua.jenchen.models.LightConfiguration;
-import com.ua.jenchen.smarthome.database.dao.LightConfiguratonDao;
+import com.ua.jenchen.smarthome.database.dao.LampStateDao;
+import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 import com.ua.jenchen.smarthome.managers.GpioManager;
+
+import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
@@ -10,13 +14,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LightConfigurationService {
 
-    private LightConfiguratonDao dao;
+    private LightConfigurationDao dao;
     private GpioManager gpioManager;
+    private LampStateDao lampStateDao;
 
     @Inject
-    public LightConfigurationService(LightConfiguratonDao dao, GpioManager gpioManager) {
+    public LightConfigurationService(LightConfigurationDao dao, GpioManager gpioManager, LampStateDao lampStateDao) {
         this.dao = dao;
         this.gpioManager = gpioManager;
+        this.lampStateDao = lampStateDao;
     }
 
     public void create(LightConfiguration configuration) {
@@ -26,6 +32,14 @@ public class LightConfigurationService {
 
     public void runSavedConfigurations(AppCompatActivity activity) {
         dao.getAllAsLiveData().observe(activity,
-                lightConfigurations -> lightConfigurations.forEach(gpioManager::makeLampManager));
+                lightConfigurations -> lightConfigurations.stream()
+                        .filter(configuration -> gpioManager.isNotManagerExist(configuration.getUid()))
+                        .forEach(this::makeLampManager)
+        );
+    }
+
+    private void makeLampManager(LightConfiguration configuration) {
+        CompletableFuture.runAsync(() -> lampStateDao.insert(new LampState(configuration.getUid(), false)));
+        gpioManager.makeLampManager(configuration);
     }
 }

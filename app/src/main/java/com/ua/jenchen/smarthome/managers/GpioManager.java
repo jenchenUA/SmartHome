@@ -76,11 +76,12 @@ public class GpioManager {
     @Nullable
     private Gpio openMcp23017Gpio(String name, MCP23017 manager) {
         try {
-            return manager.openGpio(Arrays.stream(MCP23017GPIO.values()).filter(value -> value.getName().equals(name)).findAny().orElseThrow(IOException::new));
-        } catch (IOException e) {
+            return manager.openGpio(Arrays.stream(MCP23017GPIO.values())
+                    .filter(value -> value.getName().equals(name))
+                    .findAny()
+                    .orElseThrow(IOException::new));
+        } catch (Throwable e) {
             Log.e(LOG_TAG, "GPIO " + name + " can't be opened", e);
-        } catch (Throwable throwable) {
-            Log.e(LOG_TAG, "GPIO " + name + " can't be opened", throwable);
         }
         return null;
     }
@@ -95,6 +96,8 @@ public class GpioManager {
             lampManagers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
         }
+        Log.i(LOG_TAG, String.format("Lamp control was created for button %s, control %s and label %s",
+                configuration.getButtonPin(), configuration.getControlPin(), configuration.getLabel()));
         return result;
     }
 

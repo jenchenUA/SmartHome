@@ -1,6 +1,7 @@
 package com.ua.jenchen.smarthome.server;
 
 import com.ua.jenchen.smarthome.application.SmartHomeApplication;
+import com.ua.jenchen.smarthome.server.controllers.LampStateController;
 import com.ua.jenchen.smarthome.server.controllers.LightConfigurationController;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,7 @@ import io.javalin.http.staticfiles.Location;
 
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
+import static io.javalin.apibuilder.ApiBuilder.put;
 
 public class Server {
 
@@ -25,6 +27,8 @@ public class Server {
     private int port;
     @Inject
     LightConfigurationController lightConfigurationController;
+    @Inject
+    LampStateController lampStateController;
 
     public Server(int port) {
         SmartHomeApplication.appComponent.inject(this);
@@ -43,6 +47,9 @@ public class Server {
             path("light", () -> {
                 path("config", () -> {
                     post(lightConfigurationController::createConfiguration);
+                });
+                path(":uid/state", () -> {
+                    put(lampStateController::changeLampState);
                 });
             });
         });

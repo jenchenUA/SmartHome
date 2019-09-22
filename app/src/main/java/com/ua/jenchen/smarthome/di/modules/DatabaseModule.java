@@ -4,7 +4,8 @@ import android.content.Context;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.smarthome.database.AppDatabase;
-import com.ua.jenchen.smarthome.database.dao.LightConfiguratonDao;
+import com.ua.jenchen.smarthome.database.dao.LampStateDao;
+import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 
 import javax.inject.Singleton;
 
@@ -20,13 +21,21 @@ public class DatabaseModule {
     @Provides
     @Singleton
     public AppDatabase appDatabase(Context context) {
-        return Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME).build();
+        return Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     @Provides
     @Singleton
-    public LightConfiguratonDao configurationDao(AppDatabase database) {
-        return database.lightConfiguratonDao();
+    public LightConfigurationDao configurationDao(AppDatabase database) {
+        return database.lightConfigurationDao();
+    }
+
+    @Provides
+    @Singleton
+    public LampStateDao lampStateDao(AppDatabase database) {
+        return database.lampStateDao();
     }
 
     @Provides

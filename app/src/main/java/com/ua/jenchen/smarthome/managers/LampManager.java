@@ -53,6 +53,7 @@ public class LampManager implements AutoCloseable {
     private Gpio configureOutput(Gpio gpio) throws IOException {
         gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
         gpio.setActiveType(Gpio.ACTIVE_LOW);
+        gpio.setValue(false);
         return gpio;
     }
 }

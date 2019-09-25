@@ -33,4 +33,7 @@ public interface LightConfigurationDao {
 
     @Delete
     void delete(LightConfiguration configuration);
+
+    @Query("DELETE FROM " + AppConstants.LIGHT_CONFIGURATION_TABLE_NAME + " WHERE uid = :uid")
+    void deleteByUid(String uid);
 }

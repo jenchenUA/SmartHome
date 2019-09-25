@@ -1,0 +1,14 @@
+.form-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.seventy-width-field {
+  width: 70%
+}
+
+div[mat-dialog-actions] {
+  float: right;
+}

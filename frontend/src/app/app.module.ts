@@ -14,31 +14,49 @@ import {FormsModule} from "@angular/forms";
 import {MatCardModule} from "@angular/material/card";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {HttpClientModule} from "@angular/common/http";
-import {LightConfigurationService} from "./light-configuration/service/light-configuration.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {LightConfigurationDialog} from "./light-configuration/dialog/light-configuration.dialog";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatIconModule} from "@angular/material/icon";
+import { FabButtonComponent } from './fab-button/fab-button.component';
+import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatMenuModule} from "@angular/material/menu";
+import {RemoveConfirmationDialogComponent} from './remove-confirmation.dialog/remove-confirmation.dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LightConfigurationComponent
+    LightConfigurationComponent,
+    LightConfigurationDialog,
+    FabButtonComponent,
+    RemoveConfirmationDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    BrowserAnimationsModule,
-    MatListModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatCardModule,
-    MatGridListModule,
-    MatSnackBarModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule,
+        MatListModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatCardModule,
+        MatGridListModule,
+        MatSnackBarModule,
+        HttpClientModule,
+        MatDialogModule,
+        MatIconModule,
+        MatToolbarModule,
+        FlexLayoutModule,
+        MatMenuModule
+    ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    LightConfigurationDialog,
+    RemoveConfirmationDialogComponent
+  ]
 })
 export class AppModule {
 }

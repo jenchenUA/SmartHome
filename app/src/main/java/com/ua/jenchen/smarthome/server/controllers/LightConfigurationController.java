@@ -21,4 +21,20 @@ public class LightConfigurationController {
         service.create(request.bodyAsClass(LightConfiguration.class));
         request.status(201);
     }
+
+    public void getConfigurations(Context request) {
+        request.json(service.getConfigurations());
+        request.status(200);
+    }
+
+    public void getConfiguration(Context request) {
+        service.getConfiguration(request.pathParam("uid"))
+                .ifPresent(request::json);
+        request.status(200);
+    }
+
+    public void deleteConfiguration(Context request) {
+        service.deleteConfiguration(request.pathParam("uid"));
+        request.status(204);
+    }
 }

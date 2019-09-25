@@ -10,13 +10,20 @@ export class LightConfigurationService {
 
   baseUrl = environment.baseUrl;
 
-  constructor(private http: HttpClient) {
-
-  }
+  constructor(private http: HttpClient) {}
 
   createLightConfiguration(configuration: LightConfiguration) {
     let body = JSON.stringify(configuration);
     const options = {headers: {'Content-Type': 'application/json'}};
-    return this.http.post(this.baseUrl + "/light/config", body, options);
+    return this.http.post(this.baseUrl + "/light/configuration", body, options);
+  }
+
+  getLightConfigurations() {
+    const options = {};
+    return this.http.get(this.baseUrl + "/light/configuration", options);
+  }
+
+  delete(uid: string) {
+    return this.http.delete(this.baseUrl + "/light/configuration/" + uid, {})
   }
 }

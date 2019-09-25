@@ -7,6 +7,7 @@ import com.ua.jenchen.models.LightConfiguration;
 import com.ua.jenchen.smarthome.button.Button;
 import com.ua.jenchen.smarthome.listeners.LightButtonListener;
 
+import java.io.Closeable;
 import java.io.IOException;
 
 public class LampManager implements AutoCloseable {
@@ -42,8 +43,9 @@ public class LampManager implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
-        button.close();
+    public void close() {
+        close(button);
+        close(controlPin);
     }
 
     private String getUid() {
@@ -55,5 +57,21 @@ public class LampManager implements AutoCloseable {
         gpio.setActiveType(Gpio.ACTIVE_LOW);
         gpio.setValue(false);
         return gpio;
+    }
+
+    private void close(Closeable closeable) {
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Can't be closed object: " + closeable);
+        }
+    }
+
+    private void close(AutoCloseable closeable) {
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Can't be closed object: " + closeable);
+        }
     }
 }

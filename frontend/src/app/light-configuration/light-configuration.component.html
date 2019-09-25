@@ -1,54 +1,30 @@
-<div class="basic-container">
-  <mat-card>
-    <mat-card-title>
-      <p class="light-card-title">Light switcher configuration</p>
-    </mat-card-title>
-    <mat-card-content>
-      <form (ngSubmit)="create()" #form="ngForm">
-        <div class="form-group">
-          <mat-form-field appearance="standard" class="seventy-width-field">
-            <mat-label>Button Pin</mat-label>
-            <input matInput placeholder="BCM1, GPA1" name="buttonPin" [(ngModel)]="configuration.buttonPin" required #buttonPin="ngModel">
-          </mat-form-field>
-          <div [hidden]="buttonPin.valid || buttonPin.pristine" class="alert alert-danger">
-            Button pin is required
-          </div>
-          <div [hidden]="configurationNotSame" class="alert alert-danger">
-            Control and button pins can't be same
-          </div>
+<div class="main-div">
+  <div class="row">
+    <div *ngFor="let item of data; let i = index" class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+      <mat-card>
+        <div class="row">
+          <mat-card-title class="col col-lg-11">
+            <span>{{item.label}}</span>
+          </mat-card-title>
+          <button class="col-md-1 col-lg" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item>
+              <mat-icon>mode_edit</mat-icon>
+              <span>Змінити</span>
+            </button>
+            <button mat-menu-item (click)="onDeleteClick(item.uid, i)">
+              <mat-icon>delete</mat-icon>
+              <span>Видалити</span>
+            </button>
+          </mat-menu>
         </div>
-        <div class="form-group">
-          <mat-form-field appearance="standard" class="seventy-width-field">
-            <mat-label>Control Pin</mat-label>
-            <input matInput placeholder="BCM1, GPA1" name="controlPin" [(ngModel)]="configuration.controlPin" required #controlPin="ngModel">
-          </mat-form-field>
-          <div [hidden]="controlPin.valid || controlPin.pristine" class="alert alert-danger">
-            Control pin is required
-          </div>
-          <div [hidden]="configurationNotSame" class="alert alert-danger">
-            Control and button pins can't be same
-          </div>
-        </div>
-        <div class="form-group">
-          <mat-form-field appearance="standard" class="seventy-width-field">
-            <mat-label>Label</mat-label>
-            <input matInput placeholder="Kitchen Light" name="label" [(ngModel)]="configuration.label" required #label="ngModel">
-          </mat-form-field>
-          <div [hidden]="label.valid || label.pristine" class="alert alert-danger">
-            Label is required
-          </div>
-        </div>
-        <div class="form-group">
-          <mat-form-field appearance="standard" class="seventy-width-field">
-            <mat-label>GPIO Address</mat-label>
-            <input matInput placeholder="32" value="0" name="gpioAddress" [(ngModel)]="configuration.gpioAddress" required #gpioAddress="ngModel">
-          </mat-form-field>
-          <div [hidden]="gpioAddress.valid || gpioAddress.pristine" class="alert alert-danger">
-            GPIO Address is required
-          </div>
-        </div>
-        <button mat-stroked-button class="light-button">Create</button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+        <mat-card-content>
+          <button mat-stroked-button (click)="changeState(item.uid)">Вимикач</button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <app-fab-button (onClick)="openDialog()" [icon]="fabIcon"></app-fab-button>
 </div>

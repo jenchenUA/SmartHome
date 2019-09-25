@@ -16,6 +16,8 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.core.util.CorsPlugin;
 import io.javalin.http.staticfiles.Location;
 
+import static io.javalin.apibuilder.ApiBuilder.delete;
+import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
 import static io.javalin.apibuilder.ApiBuilder.put;
@@ -45,8 +47,11 @@ public class Server {
         CorsPlugin.forAllOrigins().apply(server);
         server.routes(() -> {
             path("light", () -> {
-                path("config", () -> {
+                path("configuration", () -> {
                     post(lightConfigurationController::createConfiguration);
+                    get(lightConfigurationController::getConfigurations);
+                    get(":uid", lightConfigurationController::getConfiguration);
+                    delete(":uid", lightConfigurationController::getConfiguration);
                 });
                 path(":uid/state", () -> {
                     put(lampStateController::changeLampState);

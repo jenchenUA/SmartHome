@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Налаштування світла</h1>
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <div class="form-group">
+      <mat-form-field appearance="standard" class="seventy-width-field">
+        <mat-label>Пін перемикача</mat-label>
+        <input matInput placeholder="BCM1, GPA1" name="buttonPin" [(ngModel)]="data.buttonPin" required #buttonPin="ngModel">
+      </mat-form-field>
+      <div [hidden]="buttonPin.valid || buttonPin.pristine" class="alert alert-danger">
+        Пін перемикача не може бути порожнім
+      </div>
+      <div [hidden]="configurationNotSame" class="alert alert-danger">
+        Піни реле та перемикача не можуть бути однаковими
+      </div>
+    </div>
+    <div class="form-group">
+      <mat-form-field appearance="standard" class="seventy-width-field">
+        <mat-label>Пін реле</mat-label>
+        <input matInput placeholder="BCM1, GPA1" name="controlPin" [(ngModel)]="data.controlPin" required #controlPin="ngModel">
+      </mat-form-field>
+      <div [hidden]="controlPin.valid || controlPin.pristine" class="alert alert-danger">
+        Пін реле
+      </div>
+      <div [hidden]="configurationNotSame" class="alert alert-danger">
+        Піни реле та перемикача не можуть бути однаковими
+      </div>
+    </div>
+    <div class="form-group">
+      <mat-form-field appearance="standard" class="seventy-width-field">
+        <mat-label>Назва перемикача</mat-label>
+        <input matInput placeholder="Кухня, Кімната" name="label" [(ngModel)]="data.label" required #label="ngModel">
+      </mat-form-field>
+      <div [hidden]="label.valid || label.pristine" class="alert alert-danger">
+        Назва не може бути порожньою
+      </div>
+    </div>
+    <div class="form-group">
+      <mat-form-field appearance="standard" class="seventy-width-field">
+        <mat-label>Адреса GPIO</mat-label>
+        <input matInput placeholder="32" [defaultValue]="0" value="0" name="gpioAddress" [(ngModel)]="data.gpioAddress" required #gpioAddress="ngModel">
+      </mat-form-field>
+      <div [hidden]="gpioAddress.valid || gpioAddress.pristine" class="alert alert-danger">
+        Адреса GPIO не може бути порожньою
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" color="warn">Відмінити</button>
+  <button mat-button (click)="createConfiguration()">Створити</button>
+</div>

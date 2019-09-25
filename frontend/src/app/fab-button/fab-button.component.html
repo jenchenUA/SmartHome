@@ -1,0 +1,6 @@
+<div class="fab-container">
+  <button mat-fab class="fab-toggler"
+          (click)="onToggleFab()" color="primary">
+    <i class="material-icons" [@fabToggler]="{value: fabTogglerState}">{{icon}}</i>
+  </button>
+</div>

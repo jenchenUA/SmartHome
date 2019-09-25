@@ -91,7 +91,6 @@ public class GpioManager {
         Gpio buttonPin = openGpio(configuration.getButtonPin(), configuration.getGpioAddress());
         Gpio controlPin = openGpio(configuration.getControlPin(), configuration.getGpioAddress());
         if (buttonPin != null && controlPin != null) {
-            gpios.add(controlPin);
             LampManager manager = new LampManager(buttonPin, controlPin, configuration);
             lampManagers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
@@ -99,6 +98,15 @@ public class GpioManager {
         Log.i(LOG_TAG, String.format("Lamp control was created for button %s, control %s and label %s",
                 configuration.getButtonPin(), configuration.getControlPin(), configuration.getLabel()));
         return result;
+    }
+
+    public void destroyLampManager(String uid) {
+        Optional.ofNullable(lampManagers.get(uid)).ifPresent(manager -> {
+            lampManagers.remove(uid);
+            manager.close();
+            Log.i(LOG_TAG,
+                    String.format("Lamp manager with uid: %s and label: %s was destroyed", uid, manager.getLabel()));
+        });
     }
 
     public Optional<WarmFloorManager> makeWarmFloorManager(WarmFloorConfiguration configuration) {

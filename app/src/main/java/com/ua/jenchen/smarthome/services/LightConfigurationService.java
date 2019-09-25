@@ -6,6 +6,8 @@ import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
@@ -30,6 +32,14 @@ public class LightConfigurationService {
         gpioManager.makeLampManager(configuration);
     }
 
+    public List<LightConfiguration> getConfigurations() {
+        return dao.getAll();
+    }
+
+    public Optional<LightConfiguration> getConfiguration(String uid) {
+        return Optional.ofNullable(dao.getByUid(uid));
+    }
+
     public void runSavedConfigurations(AppCompatActivity activity) {
         dao.getAllAsLiveData().observe(activity,
                 lightConfigurations -> lightConfigurations.stream()
@@ -41,5 +51,10 @@ public class LightConfigurationService {
     private void makeLampManager(LightConfiguration configuration) {
         CompletableFuture.runAsync(() -> lampStateDao.insert(new LampState(configuration.getUid(), false)));
         gpioManager.makeLampManager(configuration);
+    }
+
+    public void deleteConfiguration(String uid) {
+        dao.deleteByUid(uid);
+        gpioManager.destroyLampManager(uid);
     }
 }

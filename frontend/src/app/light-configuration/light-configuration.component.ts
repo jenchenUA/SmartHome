@@ -78,7 +78,7 @@ export class LightConfigurationComponent implements OnInit {
     matDialogRef.afterClosed()
       .subscribe(result => {
         if (result) {
-          this.delete(uid, result);
+          this.delete(uid, index);
         }
       });
   }

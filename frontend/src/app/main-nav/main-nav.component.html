@@ -1,0 +1,35 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false" color="primary">
+    <mat-toolbar color="primary">
+      <span>Menu</span>
+    </mat-toolbar>
+    <mat-nav-list>
+      <mat-divider></mat-divider>
+      <a mat-list-item href="#">
+        <mat-icon>emoji_objects</mat-icon>
+        <span>Світло</span>
+      </a>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Smart Home</span>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <div class="basic-container content">
+      <app-light-configuration>Loading...</app-light-configuration>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

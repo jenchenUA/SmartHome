@@ -22,6 +22,8 @@ import { FabButtonComponent } from './fab-button/fab-button.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatMenuModule} from "@angular/material/menu";
 import {RemoveConfirmationDialogComponent} from './remove-confirmation.dialog/remove-confirmation.dialog.component';
+import { MainNavComponent } from './main-nav/main-nav.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import {RemoveConfirmationDialogComponent} from './remove-confirmation.dialog/re
     LightConfigurationComponent,
     LightConfigurationDialog,
     FabButtonComponent,
-    RemoveConfirmationDialogComponent
+    RemoveConfirmationDialogComponent,
+    MainNavComponent
   ],
     imports: [
         BrowserModule,
@@ -48,8 +51,8 @@ import {RemoveConfirmationDialogComponent} from './remove-confirmation.dialog/re
         MatDialogModule,
         MatIconModule,
         MatToolbarModule,
-        FlexLayoutModule,
-        MatMenuModule
+        MatMenuModule,
+        LayoutModule
     ],
   providers: [],
   bootstrap: [AppComponent],

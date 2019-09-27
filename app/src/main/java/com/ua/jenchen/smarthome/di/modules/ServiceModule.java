@@ -19,8 +19,9 @@ public class ServiceModule {
     @Singleton
     public LightConfigurationService lightConfigurationService(LightConfigurationDao lightConfigurationDao,
                                                                GpioManager gpioManager,
-                                                               LampStateDao lampStateDao) {
-        return new LightConfigurationService(lightConfigurationDao, gpioManager, lampStateDao);
+                                                               LampStateDao lampStateDao,
+                                                               FirebaseDatabase database) {
+        return new LightConfigurationService(lightConfigurationDao, gpioManager, lampStateDao, database);
     }
 
     @Provides

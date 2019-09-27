@@ -51,7 +51,7 @@ public class Server {
                     post(lightConfigurationController::createConfiguration);
                     get(lightConfigurationController::getConfigurations);
                     get(":uid", lightConfigurationController::getConfiguration);
-                    delete(":uid", lightConfigurationController::getConfiguration);
+                    delete(":uid", lightConfigurationController::deleteConfiguration);
                 });
                 path(":uid/state", () -> {
                     put(lampStateController::changeLampState);

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import androidx.annotation.Nullable;
 
@@ -25,25 +24,24 @@ public class GpioManager {
     private static final String LOG_TAG = GpioManager.class.getSimpleName();
 
     private static GpioManager instance;
-    private List<Gpio> gpios;
     private Map<String, LampManager> lampManagers;
     private Map<String, WarmFloorManager> floorManagers;
     private PeripheralManager peripheralManager;
     private PeripheralGpioManager peripheralGpioManager;
+    private Map<String, Gpio> unusedGpios;
 
     public GpioManager(PeripheralGpioManager manager) {
         peripheralManager = PeripheralManager.getInstance();
         peripheralGpioManager = manager;
-        gpios = new CopyOnWriteArrayList<>();
         lampManagers = new ConcurrentHashMap<>();
         floorManagers = new ConcurrentHashMap<>();
+        unusedGpios = new ConcurrentHashMap<>();
     }
 
     public Optional<Gpio> getGpio(String name) {
         Optional<Gpio> result = Optional.empty();
         try {
             Gpio gpio = peripheralManager.openGpio(name);
-            gpios.add(gpio);
             result = Optional.of(gpio);
         } catch (IOException e) {
             Log.e(LOG_TAG, "GPIO with name " + name + " is unavailable", e);
@@ -66,7 +64,13 @@ public class GpioManager {
 
     private Gpio openDeviceGpio(String name, PeripheralManager manager) {
         try {
-            return manager.openGpio(name);
+            Gpio gpio = unusedGpios.get(name);
+            if (gpio == null) {
+                gpio = manager.openGpio(name);
+            } else {
+                unusedGpios.remove(name);
+            }
+            return gpio;
         } catch (IOException e) {
             Log.e(LOG_TAG, "GPIO " + name + " can't be opened", e);
         }
@@ -103,7 +107,7 @@ public class GpioManager {
     public void destroyLampManager(String uid) {
         Optional.ofNullable(lampManagers.get(uid)).ifPresent(manager -> {
             lampManagers.remove(uid);
-            manager.close();
+            manager.releaseGpios().forEach(gpio -> unusedGpios.put(gpio.getName(), gpio));
             Log.i(LOG_TAG,
                     String.format("Lamp manager with uid: %s and label: %s was destroyed", uid, manager.getLabel()));
         });
@@ -114,7 +118,6 @@ public class GpioManager {
         Gpio buttonPin = openGpio(configuration.getSwircherPin(), configuration.getGpioAddress());
         Gpio controlPin = openGpio(configuration.getControlPin(), configuration.getGpioAddress());
         if (buttonPin != null && controlPin != null) {
-            gpios.add(controlPin);
             WarmFloorManager manager = new WarmFloorManager(controlPin, buttonPin, configuration);
             floorManagers.put(configuration.getUid(), manager);
             result = Optional.of(manager);
@@ -141,9 +144,9 @@ public class GpioManager {
     public void closeAllGpios() {
         lampManagers.values().forEach(this::close);
         floorManagers.values().forEach(this::close);
-        gpios.forEach(this::close);
-        gpios.clear();
         lampManagers.clear();
+        unusedGpios.values().forEach(this::close);
+        unusedGpios.clear();
     }
 
     private void close(AutoCloseable closeable) {

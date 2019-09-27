@@ -17,7 +17,6 @@
 package com.ua.jenchen.smarthome.button;
 
 import android.os.Handler;
-import androidx.annotation.VisibleForTesting;
 import android.util.Log;
 import android.view.ViewConfiguration;
 
@@ -26,6 +25,8 @@ import com.google.android.things.pio.GpioCallback;
 import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
+
+import androidx.annotation.VisibleForTesting;
 
 /**
  * Driver for GPIO based buttons with pull-up or pull-down resistors.
@@ -185,12 +186,18 @@ public class Button implements AutoCloseable {
         mListener = null;
 
         if (mButtonGpio != null) {
-            mButtonGpio.unregisterGpioCallback(mInterruptCallback);
+            unregisterCallback();
             try {
                 mButtonGpio.close();
             } finally {
                 mButtonGpio = null;
             }
+        }
+    }
+
+    public void unregisterCallback() {
+        if (mButtonGpio != null) {
+            mButtonGpio.unregisterGpioCallback(mInterruptCallback);
         }
     }
 

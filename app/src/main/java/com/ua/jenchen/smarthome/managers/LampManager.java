@@ -7,8 +7,9 @@ import com.ua.jenchen.models.LightConfiguration;
 import com.ua.jenchen.smarthome.button.Button;
 import com.ua.jenchen.smarthome.listeners.LightButtonListener;
 
-import java.io.Closeable;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class LampManager implements AutoCloseable {
 
@@ -16,11 +17,13 @@ public class LampManager implements AutoCloseable {
 
     private Button button;
     private Gpio controlPin;
+    private Gpio buttonPin;
     private LightConfiguration configuration;
 
     public LampManager(Gpio buttonPin, Gpio controlPin, LightConfiguration configuration) {
         try {
             this.controlPin = configureOutput(controlPin);
+            this.buttonPin = buttonPin;
             button = new Button(buttonPin, Button.LogicState.PRESSED_WHEN_LOW);
             button.setOnButtonEventListener(new LightButtonListener(getUid(), controlPin));
             this.configuration = configuration;
@@ -38,14 +41,22 @@ public class LampManager implements AutoCloseable {
         }
     }
 
+    @Override
+    public void close() throws Exception {
+        disable(controlPin);
+        button.close();
+        controlPin.close();
+    }
+
     public String getLabel() {
         return configuration.getLabel();
     }
 
-    @Override
-    public void close() {
-        close(button);
-        close(controlPin);
+
+    public List<Gpio> releaseGpios() {
+        button.unregisterCallback();
+        disable(controlPin);
+        return Arrays.asList(buttonPin, controlPin);
     }
 
     private String getUid() {
@@ -59,19 +70,11 @@ public class LampManager implements AutoCloseable {
         return gpio;
     }
 
-    private void close(Closeable closeable) {
+    private void disable(Gpio gpio) {
         try {
-            closeable.close();
+            gpio.setValue(false);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Can't be closed object: " + closeable);
-        }
-    }
-
-    private void close(AutoCloseable closeable) {
-        try {
-            closeable.close();
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Can't be closed object: " + closeable);
+            Log.e(LOG_TAG, "Can't be disabled object: " + gpio);
         }
     }
 }

@@ -8,6 +8,7 @@ import com.ua.jenchen.smarthome.di.modules.DatabaseModule;
 import com.ua.jenchen.smarthome.di.modules.PeripheralModule;
 import com.ua.jenchen.smarthome.di.modules.ServerModule;
 import com.ua.jenchen.smarthome.di.modules.ServiceModule;
+import com.ua.jenchen.smarthome.di.modules.UpdateModule;
 import com.ua.jenchen.smarthome.listeners.LampStateValueEventListener;
 import com.ua.jenchen.smarthome.listeners.LightButtonListener;
 import com.ua.jenchen.smarthome.listeners.WarmFloorConfigurationValueListener;
@@ -20,7 +21,13 @@ import dagger.BindsInstance;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {DatabaseModule.class, ServerModule.class, ServiceModule.class, PeripheralModule.class})
+@Component(modules = {
+        DatabaseModule.class,
+        ServerModule.class,
+        ServiceModule.class,
+        PeripheralModule.class,
+        UpdateModule.class
+})
 public interface AppComponent {
 
     void inject(Server server);

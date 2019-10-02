@@ -13,6 +13,13 @@
         <span>Світло</span>
       </a>
       <mat-divider></mat-divider>
+      <a mat-list-item href="#" (click)="openUpdateDialog()">
+        <mat-icon matBadge="!" matBadgeColor="warn" matBadgePosition="before" [matBadgeHidden]="!updateBadgeVisible">
+          system_update
+        </mat-icon>
+        <span>Оновлення</span>
+      </a>
+      <mat-divider></mat-divider>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

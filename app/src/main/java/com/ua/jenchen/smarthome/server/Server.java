@@ -3,6 +3,8 @@ package com.ua.jenchen.smarthome.server;
 import com.ua.jenchen.smarthome.application.SmartHomeApplication;
 import com.ua.jenchen.smarthome.server.controllers.LampStateController;
 import com.ua.jenchen.smarthome.server.controllers.LightConfigurationController;
+import com.ua.jenchen.smarthome.server.controllers.SystemUpdateController;
+import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +33,10 @@ public class Server {
     LightConfigurationController lightConfigurationController;
     @Inject
     LampStateController lampStateController;
+    @Inject
+    SystemUpdateController systemUpdateController;
+    @Inject
+    WebSocketService webSocketService;
 
     public Server(int port) {
         SmartHomeApplication.appComponent.inject(this);
@@ -57,6 +63,15 @@ public class Server {
                     put(lampStateController::changeLampState);
                 });
             });
+            path("system/update", () -> {
+                get(systemUpdateController::checkUpdate);
+                path("perform", () -> get(systemUpdateController::performUpdate));
+                path("reboot", () -> get(systemUpdateController::performUpdateAndReboot));
+            });
+        });
+        server.ws(":channel", ws -> {
+            ws.onConnect(webSocketService::subscribe);
+            ws.onClose(webSocketService::unsubscribe);
         });
     }
 

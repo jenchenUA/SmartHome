@@ -24,6 +24,10 @@ import {MatMenuModule} from "@angular/material/menu";
 import {RemoveConfirmationDialogComponent} from './remove-confirmation.dialog/remove-confirmation.dialog.component';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import {MatBadgeModule} from "@angular/material/badge";
+import { UpdateDialogComponent } from './system-update/update-dialog/update-dialog.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @NgModule({
   declarations: [
@@ -32,7 +36,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     LightConfigurationDialog,
     FabButtonComponent,
     RemoveConfirmationDialogComponent,
-    MainNavComponent
+    MainNavComponent,
+    UpdateDialogComponent
   ],
     imports: [
         BrowserModule,
@@ -52,13 +57,17 @@ import { LayoutModule } from '@angular/cdk/layout';
         MatIconModule,
         MatToolbarModule,
         MatMenuModule,
-        LayoutModule
+        LayoutModule,
+        MatBadgeModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule
     ],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
     LightConfigurationDialog,
-    RemoveConfirmationDialogComponent
+    RemoveConfirmationDialogComponent,
+    UpdateDialogComponent
   ]
 })
 export class AppModule {

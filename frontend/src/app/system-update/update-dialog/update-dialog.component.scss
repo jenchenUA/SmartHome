@@ -1,0 +1,12 @@
+div[mat-dialog-actions] {
+  float: right;
+}
+
+div[mat-dialog-content] {
+  .spinner-container {
+  }
+
+  mat-progress-bar {
+    width: 100%;
+  }
+}

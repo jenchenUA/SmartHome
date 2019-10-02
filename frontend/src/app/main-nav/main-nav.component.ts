@@ -1,14 +1,31 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import {environment} from "../../environments/environment";
+import {PlatformLocation} from "@angular/common";
+import {WebsocketService} from "../websocket-service/websocket.service";
+import {WS} from "../websocket-service/websocket.events";
+import {UpdateModel} from "../system-update/model/update.model";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {UpdateDialogComponent} from "../system-update/update-dialog/update-dialog.component";
+import {SystemUpdateService} from "../system-update/service/system-update.service";
+import {VersionInfo} from "../system-update/model/version.info";
+import {UpdateStatus} from "../system-update/model/update.status";
+import {NewVersion} from "../system-update/model/new.version";
 
 @Component({
   selector: 'app-main-nav',
   templateUrl: './main-nav.component.html',
   styleUrls: ['./main-nav.component.css']
 })
-export class MainNavComponent {
+export class MainNavComponent implements OnInit {
+
+  updateBadgeVisible: boolean = false;
+  ws: WebSocket;
+  baseUrl = environment.baseUrl;
+  updateData: UpdateModel = new UpdateModel();
+  private updateDialogRef: MatDialogRef<UpdateDialogComponent>;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -16,6 +33,45 @@ export class MainNavComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver,
+              private wsService: WebsocketService,
+              private dialog: MatDialog,
+              private systemUpdateService: SystemUpdateService) {
+    // this.updateData = this.prepareTestData();
+    this.updateData.updateStatus = UpdateStatus.UPDATE_IDLE;
+    wsService.on<UpdateModel>(WS.ON.SYSTEM_UPDATE).subscribe((update) => {
+      console.log(update);
+      if (update.updateStatus == UpdateStatus.UPDATE_AVAILABLE.toString()
+        || update.updateStatus == UpdateStatus.UPDATE_DOWNLOADING.toString()
+        || update.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT.toString()) {
+        this.updateBadgeVisible = true;
+        this.updateData = update;
+        if (this.updateDialogRef && this.updateDialogRef.componentInstance.data) {
+          this.updateDialogRef.componentInstance.data = update;
+        }
+      } else if (!this.updateBadgeVisible && update.updateStatus == UpdateStatus.UPDATE_IDLE) {
+        this.updateData = update;
+      }
+    });
+  }
 
+  prepareTestData(): UpdateModel {
+    let updateModel = new UpdateModel();
+    updateModel.updateStatus = UpdateStatus.UPDATE_FINALIZING;
+    updateModel.currentVersion = new VersionInfo();
+    updateModel.currentVersion.androidThingsVersion = "124";
+    updateModel.currentVersion.buildId = "124";
+    updateModel.newVersion = new NewVersion();
+    updateModel.newVersion.downloadProgress = 0.5;
+    updateModel.newVersion.versionInfo = updateModel.currentVersion;
+    return updateModel;
+  }
+
+  ngOnInit(): void {
+    // this.systemUpdateService.checkUpdate().subscribe((data: VersionInfo) => this.updateData.currentVersion = data);
+  }
+
+  openUpdateDialog(): void {
+    this.updateDialogRef = this.dialog.open(UpdateDialogComponent, {data: this.updateData});
+  }
 }

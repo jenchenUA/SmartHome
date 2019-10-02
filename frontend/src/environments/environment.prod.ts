@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  baseUrl: ""
+  baseUrl: "",
+  wsSocketUrl: "ws://" + window.location.host + "/updates"
 };

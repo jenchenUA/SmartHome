@@ -1,7 +1,11 @@
 package com.ua.jenchen.smarthome.di.modules;
 
+import com.ua.jenchen.smarthome.server.controllers.LampStateController;
 import com.ua.jenchen.smarthome.server.controllers.LightConfigurationController;
+import com.ua.jenchen.smarthome.server.controllers.SystemUpdateController;
+import com.ua.jenchen.smarthome.services.LampStateService;
 import com.ua.jenchen.smarthome.services.LightConfigurationService;
+import com.ua.jenchen.smarthome.services.SystemUpdateService;
 
 import javax.inject.Singleton;
 
@@ -15,5 +19,17 @@ public class ServerModule {
     @Singleton
     public LightConfigurationController lightConfigurationController(LightConfigurationService service) {
         return new LightConfigurationController(service);
+    }
+
+    @Provides
+    @Singleton
+    public LampStateController lampStateController(LampStateService lampStateService) {
+        return new LampStateController(lampStateService);
+    }
+
+    @Provides
+    @Singleton
+    public SystemUpdateController systemUpdateController(SystemUpdateService systemUpdateService) {
+        return new SystemUpdateController(systemUpdateService);
     }
 }

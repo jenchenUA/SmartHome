@@ -1,11 +1,14 @@
 package com.ua.jenchen.smarthome.di.modules;
 
+import com.google.android.things.update.UpdateManager;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 import com.ua.jenchen.smarthome.services.LampStateService;
 import com.ua.jenchen.smarthome.services.LightConfigurationService;
+import com.ua.jenchen.smarthome.services.SystemUpdateService;
+import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import javax.inject.Singleton;
 
@@ -28,5 +31,17 @@ public class ServiceModule {
     @Singleton
     public LampStateService lampStateService(LampStateDao dao, FirebaseDatabase database, GpioManager gpioManager) {
         return new LampStateService(dao, database, gpioManager);
+    }
+
+    @Provides
+    @Singleton
+    public SystemUpdateService systemUpdateService(UpdateManager updateManager) {
+        return new SystemUpdateService(updateManager);
+    }
+
+    @Singleton
+    @Provides
+    public WebSocketService webSocketService() {
+        return new WebSocketService();
     }
 }

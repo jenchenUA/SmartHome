@@ -67,6 +67,7 @@ public class Server {
                 get(systemUpdateController::checkUpdate);
                 path("perform", () -> get(systemUpdateController::performUpdate));
                 path("reboot", () -> get(systemUpdateController::performUpdateAndReboot));
+                path("version", () -> get(systemUpdateController::getCurrentVersion));
             });
         });
         server.ws(":channel", ws -> {

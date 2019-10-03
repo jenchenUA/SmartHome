@@ -17,7 +17,7 @@ export class LightConfigurationComponent implements OnInit {
   data: LightConfiguration[];
   fabIcon: string = "add";
 
-  constructor(public dialog: MatDialog,
+  constructor(private dialog: MatDialog,
               private configurationService: LightConfigurationService,
               private stateService: LightStateService,
               private snackBar: MatSnackBar) {

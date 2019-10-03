@@ -1,6 +1,5 @@
 package com.ua.jenchen.smarthome.server.controllers;
 
-import com.google.android.things.update.VersionInfo;
 import com.ua.jenchen.smarthome.services.SystemUpdateService;
 
 import io.javalin.http.Context;
@@ -14,18 +13,22 @@ public class SystemUpdateController {
     }
 
     public void checkUpdate(Context request) {
-        VersionInfo version = systemUpdateService.checkUpdate();
-        request.json(version);
-        request.status(204);
+        request.json(systemUpdateService.checkUpdate());
+        request.status(200);
     }
 
     public void performUpdate(Context request) {
-        systemUpdateService.performUpdate();
-        request.status(204);
+        request.json(systemUpdateService.performUpdate());
+        request.status(200);
     }
 
     public void performUpdateAndReboot(Context request) {
-        systemUpdateService.performUpdateAndReboot();
-        request.status(204);
+        request.json(systemUpdateService.performUpdateAndReboot());
+        request.status(200);
+    }
+
+    public void getCurrentVersion(Context request) {
+        request.json(systemUpdateService.getCurrentVersion());
+        request.status(200);
     }
 }

@@ -1,19 +1,32 @@
-<h1 mat-dialog-title>Оновлення системи "Smart House"</h1>
+<h1 mat-dialog-title>Оновлення системи "Smart Home"</h1>
 <div mat-dialog-content>
   <div class="container">
     <div class="row">
-      <div *ngIf="data.updateStatus == UpdateStatus.UPDATE_CHECKING">
-        <mat-spinner class="col-md-3 text-center" diameter="50"></mat-spinner>
-        <span class="col-md text-center">Шукаємо оновлення...</span>
+      <div class="row col-md-12">
+        <h4 class="col-md-12">Поточна версія:</h4>
+        <div class="row col-md-12">
+          <span class="col-md-12">
+            OS ver: {{data.currentVersion.androidThingsVersion}}
+          </span>
+          <span class="col-md-12">
+            Build ver: {{data.currentVersion.buildId}}
+          </span>
+        </div>
       </div>
-      <div *ngIf="data.updateStatus == UpdateStatus.UPDATE_IDLE">
-        <button mat-stroked-button (click)="checkUpdate()">Перевірити оновлення</button>
+      <div class="row col-md-12" *ngIf="isNewVersionInformationVisible()">
+        <h4 class="col-md-12">Нова версія:</h4>
+        <div class="row col-md-12">
+          <span class="col-md-12">
+            New OS ver: {{data.newVersion.versionInfo.androidThingsVersion}}
+          </span>
+          <span class="col-md-12">
+            New build ver: {{data.newVersion.versionInfo.buildId}}
+          </span>
+        </div>
       </div>
-      <div *ngIf="data.updateStatus == UpdateStatus.UPDATE_AVAILABLE">
-        <button mat-stroked-button (click)="applyAndReboot()">Оновити и перезавантажити</button>
-      </div>
-      <div *ngIf="data.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT">
-        <button mat-stroked-button (click)="applyAndReboot()">Перезавантажити</button>
+      <div class="col-md-12" *ngIf="data.updateStatus == UpdateStatus.UPDATE_CHECKING">
+        <span>Шукаємо оновлення...</span>
+        <mat-progress-bar mode="query"></mat-progress-bar>
       </div>
       <div class="col-md-12" *ngIf="data.updateStatus == UpdateStatus.UPDATE_DOWNLOADING">
         <span>Завантаження оновлення...</span>
@@ -23,9 +36,15 @@
         <span>Завершення оновлення...</span>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
-  </div>
+    </div>
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="close()">Ok</button>
+  <button *ngIf="data.updateStatus == UpdateStatus.UPDATE_IDLE"
+          mat-button (click)="checkUpdate()">Перевірити</button>
+  <button *ngIf="data.updateStatus == UpdateStatus.UPDATE_AVAILABLE"
+          mat-button (click)="applyUpdate()">Оновити</button>
+  <button *ngIf="data.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT"
+          mat-button (click)="applyAndReboot()">Перезавантажити</button>
+  <button mat-button (click)="close()" color="warn">Зачинити</button>
 </div>

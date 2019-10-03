@@ -3,7 +3,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {environment} from "../../environments/environment";
-import {PlatformLocation} from "@angular/common";
 import {WebsocketService} from "../websocket-service/websocket.service";
 import {WS} from "../websocket-service/websocket.events";
 import {UpdateModel} from "../system-update/model/update.model";
@@ -41,9 +40,7 @@ export class MainNavComponent implements OnInit {
     this.updateData.updateStatus = UpdateStatus.UPDATE_IDLE;
     wsService.on<UpdateModel>(WS.ON.SYSTEM_UPDATE).subscribe((update) => {
       console.log(update);
-      if (update.updateStatus == UpdateStatus.UPDATE_AVAILABLE.toString()
-        || update.updateStatus == UpdateStatus.UPDATE_DOWNLOADING.toString()
-        || update.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT.toString()) {
+      if (this.isUpdateAvailable(update)) {
         this.updateBadgeVisible = true;
         this.updateData = update;
         if (this.updateDialogRef && this.updateDialogRef.componentInstance.data) {
@@ -55,9 +52,15 @@ export class MainNavComponent implements OnInit {
     });
   }
 
+  isUpdateAvailable(update): boolean {
+    return update.updateStatus == UpdateStatus.UPDATE_AVAILABLE
+      || update.updateStatus == UpdateStatus.UPDATE_DOWNLOADING
+      || update.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT;
+  }
+
   prepareTestData(): UpdateModel {
     let updateModel = new UpdateModel();
-    updateModel.updateStatus = UpdateStatus.UPDATE_FINALIZING;
+    updateModel.updateStatus = UpdateStatus.UPDATE_IDLE;
     updateModel.currentVersion = new VersionInfo();
     updateModel.currentVersion.androidThingsVersion = "124";
     updateModel.currentVersion.buildId = "124";
@@ -68,10 +71,22 @@ export class MainNavComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.systemUpdateService.checkUpdate().subscribe((data: VersionInfo) => this.updateData.currentVersion = data);
+    this.systemUpdateService.currentVersion().subscribe(data => this.updateData.currentVersion = data,
+      error => console.log(error));
+    if (!localStorage.getItem("lastUpdate") || this.lastCheckMoreThanFiveHours()) {
+      this.systemUpdateService.checkUpdate().subscribe();
+      localStorage.setItem("lastUpdate", JSON.stringify(new Date()));
+    }
+  }
+
+  private lastCheckMoreThanFiveHours(): boolean {
+    let lastCheck: Date = new Date(JSON.parse(localStorage.getItem("lastUpdate")));
+    let threshold: Date = new Date(lastCheck.getTime() + (1000 * 60 * 60 * 5));
+    let now = new Date();
+    return threshold < now;
   }
 
   openUpdateDialog(): void {
-    this.updateDialogRef = this.dialog.open(UpdateDialogComponent, {data: this.updateData});
+    this.updateDialogRef = this.dialog.open(UpdateDialogComponent, {data: this.updateData, width: "500px"});
   }
 }

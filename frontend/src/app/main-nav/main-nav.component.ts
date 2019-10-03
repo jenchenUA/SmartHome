@@ -35,10 +35,21 @@ export class MainNavComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver,
               private wsService: WebsocketService,
               private dialog: MatDialog,
-              private systemUpdateService: SystemUpdateService) {
-    // this.updateData = this.prepareTestData();
+              private systemUpdateService: SystemUpdateService) {}
+
+  ngOnInit(): void {
     this.updateData.updateStatus = UpdateStatus.UPDATE_IDLE;
-    wsService.on<UpdateModel>(WS.ON.SYSTEM_UPDATE).subscribe((update) => {
+    this.systemUpdateSubscription();
+    this.systemUpdateService.currentVersion().subscribe(data => this.updateData.currentVersion = data,
+      error => console.log(error));
+    if (!localStorage.getItem("lastUpdate") || this.lastCheckMoreThanFiveHours()) {
+      this.systemUpdateService.checkUpdate().subscribe();
+      localStorage.setItem("lastUpdate", JSON.stringify(new Date()));
+    }
+  }
+
+  private systemUpdateSubscription() {
+    this.wsService.on<UpdateModel>(WS.ON.SYSTEM_UPDATE).subscribe((update) => {
       console.log(update);
       if (this.isUpdateAvailable(update)) {
         this.updateBadgeVisible = true;
@@ -60,27 +71,6 @@ export class MainNavComponent implements OnInit {
       || update.updateStatus == UpdateStatus.UPDATE_DOWNLOADING
       || update.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT
       || update.updateStatus == UpdateStatus.UPDATE_FINALIZING;
-  }
-
-  prepareTestData(): UpdateModel {
-    let updateModel = new UpdateModel();
-    updateModel.updateStatus = UpdateStatus.UPDATE_IDLE;
-    updateModel.currentVersion = new VersionInfo();
-    updateModel.currentVersion.androidThingsVersion = "124";
-    updateModel.currentVersion.buildId = "124";
-    updateModel.newVersion = new NewVersion();
-    updateModel.newVersion.downloadProgress = 0.5;
-    updateModel.newVersion.versionInfo = updateModel.currentVersion;
-    return updateModel;
-  }
-
-  ngOnInit(): void {
-    this.systemUpdateService.currentVersion().subscribe(data => this.updateData.currentVersion = data,
-      error => console.log(error));
-    if (!localStorage.getItem("lastUpdate") || this.lastCheckMoreThanFiveHours()) {
-      this.systemUpdateService.checkUpdate().subscribe();
-      localStorage.setItem("lastUpdate", JSON.stringify(new Date()));
-    }
   }
 
   private lastCheckMoreThanFiveHours(): boolean {

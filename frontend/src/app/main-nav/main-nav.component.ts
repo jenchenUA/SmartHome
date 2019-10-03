@@ -48,6 +48,9 @@ export class MainNavComponent implements OnInit {
         }
       } else if (!this.updateBadgeVisible && update.updateStatus == UpdateStatus.UPDATE_IDLE) {
         this.updateData = update;
+        if (this.updateDialogRef && this.updateDialogRef.componentInstance.data) {
+          this.updateDialogRef.componentInstance.data = update;
+        }
       }
     });
   }
@@ -55,7 +58,8 @@ export class MainNavComponent implements OnInit {
   isUpdateAvailable(update): boolean {
     return update.updateStatus == UpdateStatus.UPDATE_AVAILABLE
       || update.updateStatus == UpdateStatus.UPDATE_DOWNLOADING
-      || update.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT;
+      || update.updateStatus == UpdateStatus.UPDATE_NEEDS_REBOOT
+      || update.updateStatus == UpdateStatus.UPDATE_FINALIZING;
   }
 
   prepareTestData(): UpdateModel {

@@ -40,13 +40,15 @@ export class UpdateDialogComponent implements OnInit {
     this.systemUpdateService.checkUpdate().subscribe(result => {
       if (!result) {
         this.showSnackBar("Перевірка оновлення не почалося, спробуйте ще раз");
+        this.data.updateStatus = UpdateStatus.UPDATE_IDLE;
       } else {
         this.showSnackBar("Успішно");
       }
     },
     error => {
       console.log(error);
-      this.showSnackBar("Виникла помилка")
+      this.showSnackBar("Виникла помилка");
+      this.data.updateStatus = UpdateStatus.UPDATE_IDLE;
     });
   }
 
@@ -60,7 +62,7 @@ export class UpdateDialogComponent implements OnInit {
     },
     error => {
       console.log(error);
-      this.showSnackBar("Виникла помилка")
+      this.showSnackBar("Виникла помилка");
     });
   }
 
@@ -74,7 +76,7 @@ export class UpdateDialogComponent implements OnInit {
     },
     error => {
       console.log(error);
-      this.showSnackBar("Виникла помилка")
+      this.showSnackBar("Виникла помилка");
     });
   }
 

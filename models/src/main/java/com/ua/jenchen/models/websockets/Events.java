@@ -1,4 +1,4 @@
-package com.ua.jenchen.models;
+package com.ua.jenchen.models.websockets;
 
 public enum Events {
 

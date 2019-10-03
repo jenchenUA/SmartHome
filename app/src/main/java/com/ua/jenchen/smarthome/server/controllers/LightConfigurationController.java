@@ -1,6 +1,6 @@
 package com.ua.jenchen.smarthome.server.controllers;
 
-import com.ua.jenchen.models.LightConfiguration;
+import com.ua.jenchen.models.light.LightConfiguration;
 import com.ua.jenchen.smarthome.services.LightConfigurationService;
 
 import javax.inject.Inject;

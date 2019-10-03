@@ -6,8 +6,8 @@ import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 import com.ua.jenchen.drivers.mcp23017.MCP23017;
 import com.ua.jenchen.drivers.mcp23017.MCP23017GPIO;
-import com.ua.jenchen.models.LightConfiguration;
-import com.ua.jenchen.models.WarmFloorConfiguration;
+import com.ua.jenchen.models.light.LightConfiguration;
+import com.ua.jenchen.models.warmfloor.WarmFloorConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;

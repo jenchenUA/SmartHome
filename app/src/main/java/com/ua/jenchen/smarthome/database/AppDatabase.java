@@ -1,7 +1,7 @@
 package com.ua.jenchen.smarthome.database;
 
-import com.ua.jenchen.models.LampState;
-import com.ua.jenchen.models.LightConfiguration;
+import com.ua.jenchen.models.light.LampState;
+import com.ua.jenchen.models.light.LightConfiguration;
 import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 

@@ -4,11 +4,11 @@ import android.util.Log;
 
 import com.google.android.things.update.StatusListener;
 import com.google.android.things.update.UpdateManagerStatus;
-import com.ua.jenchen.models.Channels;
-import com.ua.jenchen.models.Events;
-import com.ua.jenchen.models.Message;
-import com.ua.jenchen.models.Update;
-import com.ua.jenchen.models.UpdateStatus;
+import com.ua.jenchen.models.websockets.Channels;
+import com.ua.jenchen.models.websockets.Events;
+import com.ua.jenchen.models.websockets.Message;
+import com.ua.jenchen.models.systemupdate.Update;
+import com.ua.jenchen.models.systemupdate.UpdateStatus;
 import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import org.jetbrains.annotations.NotNull;

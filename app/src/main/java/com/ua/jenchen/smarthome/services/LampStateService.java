@@ -3,7 +3,7 @@ package com.ua.jenchen.smarthome.services;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.models.AppConstants;
-import com.ua.jenchen.models.LampState;
+import com.ua.jenchen.models.light.LampState;
 import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 

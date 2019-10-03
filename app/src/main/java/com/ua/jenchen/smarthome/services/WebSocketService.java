@@ -2,7 +2,7 @@ package com.ua.jenchen.smarthome.services;
 
 import android.util.Log;
 
-import com.ua.jenchen.models.Message;
+import com.ua.jenchen.models.websockets.Message;
 
 import java.util.Collections;
 import java.util.Map;

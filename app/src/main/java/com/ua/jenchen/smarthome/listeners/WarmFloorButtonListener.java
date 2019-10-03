@@ -3,7 +3,7 @@ package com.ua.jenchen.smarthome.listeners;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.models.AppConstants;
-import com.ua.jenchen.models.WarmFloorState;
+import com.ua.jenchen.models.warmfloor.WarmFloorState;
 import com.ua.jenchen.smarthome.button.Button;
 
 public class WarmFloorButtonListener implements Button.OnButtonEventListener {

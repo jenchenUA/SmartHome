@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.ua.jenchen.models.WarmFloorState;
+import com.ua.jenchen.models.warmfloor.WarmFloorState;
 import com.ua.jenchen.smarthome.application.SmartHomeApplication;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 import com.ua.jenchen.smarthome.managers.WarmFloorManager;

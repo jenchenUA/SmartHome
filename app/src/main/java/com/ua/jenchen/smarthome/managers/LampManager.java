@@ -3,7 +3,7 @@ package com.ua.jenchen.smarthome.managers;
 import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
-import com.ua.jenchen.models.LightConfiguration;
+import com.ua.jenchen.models.light.LightConfiguration;
 import com.ua.jenchen.smarthome.button.Button;
 import com.ua.jenchen.smarthome.listeners.LightButtonListener;
 

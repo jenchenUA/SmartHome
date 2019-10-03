@@ -1,4 +1,4 @@
-package com.ua.jenchen.models;
+package com.ua.jenchen.models.systemupdate;
 
 public enum UpdateStatus {
 

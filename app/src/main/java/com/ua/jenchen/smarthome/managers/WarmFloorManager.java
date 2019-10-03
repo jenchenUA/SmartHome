@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
 import com.ua.jenchen.models.AppConstants;
-import com.ua.jenchen.models.WarmFloorConfiguration;
-import com.ua.jenchen.models.WarmFloorState;
+import com.ua.jenchen.models.warmfloor.WarmFloorConfiguration;
+import com.ua.jenchen.models.warmfloor.WarmFloorState;
 import com.ua.jenchen.smarthome.button.Button;
 import com.ua.jenchen.smarthome.listeners.WarmFloorButtonListener;
 import com.ua.jenchen.smarthome.services.AdcService;

@@ -1,4 +1,6 @@
-package com.ua.jenchen.models;
+package com.ua.jenchen.models.light;
+
+import com.ua.jenchen.models.AppConstants;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

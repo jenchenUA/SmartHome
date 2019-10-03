@@ -1,13 +1,16 @@
-package com.ua.jenchen.models;
+package com.ua.jenchen.models.light;
+
+import com.ua.jenchen.models.AppConstants;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = AppConstants.WARM_FLOOR_STATE_TABLE_NAME,
+@Entity(tableName = AppConstants.LIGHT_STATE_TABLE_NAME,
         indices = {@Index(value = "uid", unique = true)})
-public class WarmFloorState {
+public class LampState {
 
     @PrimaryKey
     private int id;
@@ -15,8 +18,15 @@ public class WarmFloorState {
     private String uid;
     @ColumnInfo(name = "state")
     private boolean state;
-    @ColumnInfo(name = "temperature")
-    private float temperature;
+
+    public LampState() {
+    }
+
+    @Ignore
+    public LampState(String uid, boolean state) {
+        this.uid = uid;
+        this.state = state;
+    }
 
     public int getId() {
         return id;
@@ -40,13 +50,5 @@ public class WarmFloorState {
 
     public void setState(boolean state) {
         this.state = state;
-    }
-
-    public float getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(float temperature) {
-        this.temperature = temperature;
     }
 }

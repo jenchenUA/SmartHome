@@ -1,4 +1,4 @@
-package com.ua.jenchen.models;
+package com.ua.jenchen.models.systemupdate;
 
 
 import com.google.android.things.update.PendingUpdateInfo;

@@ -1,7 +1,7 @@
 package com.ua.jenchen.smarthome.database.dao;
 
 import com.ua.jenchen.models.AppConstants;
-import com.ua.jenchen.models.LightConfiguration;
+import com.ua.jenchen.models.light.LightConfiguration;
 
 import java.util.List;
 

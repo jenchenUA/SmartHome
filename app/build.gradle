@@ -3,14 +3,32 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
-    defaultConfig {
-        applicationId "com.ua.jenchen.smarthome"
-        minSdkVersion 27
-        targetSdkVersion 28
-        versionCode 11
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+        versionProps['VERSION_CODE']=code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        defaultConfig {
+            applicationId "com.ua.jenchen.smarthome"
+            minSdkVersion 27
+            targetSdkVersion 28
+            versionCode code
+            versionName "1.0"
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
     buildTypes {
         release {
             minifyEnabled false

@@ -4,12 +4,21 @@ import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
 import com.ua.jenchen.models.light.LightConfiguration;
+import com.ua.jenchen.models.light.LightView;
+import com.ua.jenchen.models.websockets.Channels;
+import com.ua.jenchen.models.websockets.Events;
+import com.ua.jenchen.models.websockets.Message;
+import com.ua.jenchen.smarthome.application.SmartHomeApplication;
 import com.ua.jenchen.smarthome.button.Button;
 import com.ua.jenchen.smarthome.listeners.LightButtonListener;
+import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import javax.inject.Inject;
 
 public class LampManager implements AutoCloseable {
 
@@ -19,9 +28,12 @@ public class LampManager implements AutoCloseable {
     private Gpio controlPin;
     private Gpio buttonPin;
     private LightConfiguration configuration;
+    @Inject
+    WebSocketService socketService;
 
     public LampManager(Gpio buttonPin, Gpio controlPin, LightConfiguration configuration) {
         try {
+            SmartHomeApplication.appComponent.inject(this);
             this.controlPin = configureOutput(controlPin);
             this.buttonPin = buttonPin;
             button = new Button(buttonPin, Button.LogicState.PRESSED_WHEN_LOW);
@@ -35,10 +47,18 @@ public class LampManager implements AutoCloseable {
     public void changeStateOfLamp(boolean state) {
         try {
             controlPin.setValue(state);
+            broadcastEvent(state);
             Log.i(LOG_TAG,"State of lamp with label: " + getLabel() + " was changed");
         } catch (IOException e) {
             Log.e(LOG_TAG, "State of lamp can't be changed", e);
         }
+    }
+
+    private void broadcastEvent(boolean state) {
+        CompletableFuture.runAsync(() -> {
+            Message<LightView> message = new Message<>(Events.LIGHT_STATE.getCode(), new LightView(getUid(), state));
+            socketService.publish(Channels.UPDATES.getCode(), message);
+        });
     }
 
     @Override

@@ -12,6 +12,7 @@ import {SystemUpdateService} from "../system-update/service/system-update.servic
 import {VersionInfo} from "../system-update/model/version.info";
 import {UpdateStatus} from "../system-update/model/update.status";
 import {NewVersion} from "../system-update/model/new.version";
+import {Light} from "../light-configuration/model/light";
 
 @Component({
   selector: 'app-main-nav',
@@ -50,7 +51,6 @@ export class MainNavComponent implements OnInit {
 
   private systemUpdateSubscription() {
     this.wsService.on<UpdateModel>(WS.ON.SYSTEM_UPDATE).subscribe((update) => {
-      console.log(update);
       if (this.isUpdateAvailable(update)) {
         this.updateBadgeVisible = true;
         this.updateData = update;

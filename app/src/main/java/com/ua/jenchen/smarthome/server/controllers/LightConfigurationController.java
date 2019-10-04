@@ -37,4 +37,9 @@ public class LightConfigurationController {
         service.deleteConfiguration(request.pathParam("uid"));
         request.status(204);
     }
+
+    public void getLamps(Context request) {
+        request.json(service.getLamps());
+        request.status(200);
+    }
 }

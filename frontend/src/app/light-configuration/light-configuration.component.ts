@@ -6,6 +6,9 @@ import {LightConfigurationDialog} from "./dialog/light-configuration.dialog";
 import {MatDialog} from "@angular/material/dialog";
 import {LightStateService} from "./service/light-state.service";
 import {RemoveConfirmationDialogComponent} from "../remove-confirmation.dialog/remove-confirmation.dialog.component";
+import {Light} from "./model/light";
+import {WebsocketService} from "../websocket-service/websocket.service";
+import {WS} from "../websocket-service/websocket.events";
 
 @Component({
   selector: 'app-light-configuration',
@@ -14,18 +17,24 @@ import {RemoveConfirmationDialogComponent} from "../remove-confirmation.dialog/r
 })
 export class LightConfigurationComponent implements OnInit {
 
-  data: LightConfiguration[];
+  data: Light[];
   fabIcon: string = "add";
 
   constructor(private dialog: MatDialog,
               private configurationService: LightConfigurationService,
               private stateService: LightStateService,
-              private snackBar: MatSnackBar) {
-  }
+              private snackBar: MatSnackBar,
+              private webSocket: WebsocketService) {}
 
   ngOnInit() {
-    this.configurationService.getLightConfigurations()
-      .subscribe((data: LightConfiguration[]) => this.data = data);
+    this.configurationService.getLights().subscribe((data: Light[]) => this.data = data);
+    this.webSocket.on<Light>(WS.ON.LIGHT_STATE).subscribe((newState) => {
+      this.data.forEach(currentState => {
+        if (currentState.uid == newState.uid) {
+          currentState.state = newState.state;
+        }
+      })
+    });
   }
 
   openDialog(): void {
@@ -40,7 +49,11 @@ export class LightConfigurationComponent implements OnInit {
         .subscribe(
           () => {
             this.showSnackBar("Конфігурацію успішно створено", "", 2000);
-            this.data.push(result);
+            let view = new Light();
+            view.label = result.label;
+            view.uid = result.uid;
+            view.state = false;
+            this.data.push(view);
           },
           error => {
             console.log(error);

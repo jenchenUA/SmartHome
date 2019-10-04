@@ -5,13 +5,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.models.AppConstants;
 import com.ua.jenchen.models.light.LampState;
 import com.ua.jenchen.models.light.LightConfiguration;
+import com.ua.jenchen.models.light.LightView;
 import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -62,5 +66,18 @@ public class LightConfigurationService {
         dao.deleteByUid(uid);
         lampStateReference.child(uid).setValue(null);
         gpioManager.destroyLampManager(uid);
+    }
+
+    public List<LightView> getLamps() {
+        return getConfigurations().stream()
+                .map(this::getLightView)
+                .collect(Collectors.toList());
+    }
+
+    @NotNull
+    private LightView getLightView(LightConfiguration configuration) {
+        return Optional.ofNullable(lampStateDao.getByUid(configuration.getUid()))
+                    .map(state -> new LightView(configuration, state))
+                    .orElseGet(() -> new LightView(configuration));
     }
 }

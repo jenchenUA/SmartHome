@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {LightConfiguration} from "../model/light-configuration";
 import {environment} from "../../../environments/environment";
+import {Observable} from "rxjs";
+import {Light} from "../model/light";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +23,11 @@ export class LightConfigurationService {
   getLightConfigurations() {
     const options = {};
     return this.http.get(this.baseUrl + "/light/configuration", options);
+  }
+
+  getLights() {
+    const options = {};
+    return this.http.get(this.baseUrl + "/light", options);
   }
 
   delete(uid: string) {

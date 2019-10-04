@@ -7,7 +7,7 @@ android {
         applicationId "com.ua.jenchen.smarthome"
         minSdkVersion 27
         targetSdkVersion 28
-        versionCode 10
+        versionCode 11
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

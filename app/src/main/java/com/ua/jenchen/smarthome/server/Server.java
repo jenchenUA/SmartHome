@@ -53,6 +53,7 @@ public class Server {
         CorsPlugin.forAllOrigins().apply(server);
         server.routes(() -> {
             path("light", () -> {
+                get(lightConfigurationController::getLamps);
                 path("configuration", () -> {
                     post(lightConfigurationController::createConfiguration);
                     get(lightConfigurationController::getConfigurations);

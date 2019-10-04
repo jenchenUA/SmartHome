@@ -1,5 +1,22 @@
-mat-card {
-  width: auto;
-  display: block;
-  margin-bottom: 3%;
+.main-div {
+  div.row {
+    div {
+      mat-card {
+        width: auto;
+        display: block;
+        margin-bottom: 3%;
+
+        mat-card-content {
+          .disabled {
+            background-size: cover;
+            background-color: red;
+          }
+          .enabled {
+            background-size: cover;
+            background-color: green;
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,5 +1,6 @@
 package com.ua.jenchen.smarthome.server.controllers;
 
+import com.ua.jenchen.models.HttpCodes;
 import com.ua.jenchen.smarthome.services.LampStateService;
 
 import javax.inject.Inject;
@@ -17,6 +18,6 @@ public class LampStateController {
 
     public void changeLampState(Context request) {
         lampStateService.changeStateInFirebase(request.pathParam("uid"));
-        request.status(204);
+        request.status(HttpCodes.NO_CONTENT);
     }
 }

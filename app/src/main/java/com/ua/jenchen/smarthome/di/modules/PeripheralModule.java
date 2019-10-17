@@ -1,5 +1,6 @@
 package com.ua.jenchen.smarthome.di.modules;
 
+import com.ua.jenchen.smarthome.managers.AdcManager;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 import com.ua.jenchen.smarthome.managers.PeripheralGpioManager;
 
@@ -21,5 +22,11 @@ public class PeripheralModule {
     @Singleton
     public GpioManager gpioManager(PeripheralGpioManager manager) {
         return new GpioManager(manager);
+    }
+
+    @Provides
+    @Singleton
+    public AdcManager adcManager() {
+        return new AdcManager();
     }
 }

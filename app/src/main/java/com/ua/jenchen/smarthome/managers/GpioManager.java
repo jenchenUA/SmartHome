@@ -23,7 +23,6 @@ public class GpioManager {
 
     private static final String LOG_TAG = GpioManager.class.getSimpleName();
 
-    private static GpioManager instance;
     private Map<String, LampManager> lampManagers;
     private Map<String, WarmFloorManager> floorManagers;
     private PeripheralManager peripheralManager;
@@ -147,6 +146,7 @@ public class GpioManager {
         lampManagers.clear();
         unusedGpios.values().forEach(this::close);
         unusedGpios.clear();
+        peripheralGpioManager.closeGpioExpanders();
     }
 
     private void close(AutoCloseable closeable) {

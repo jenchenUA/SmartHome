@@ -52,4 +52,21 @@ public class PeripheralGpioManager {
     public Optional<Object> getGpioProvider(int address) {
         return Optional.ofNullable(gpioProviders.get(address));
     }
+
+    public void closeGpioExpanders() {
+        gpioProviders.values().stream()
+                .filter(MCP23017.class::isInstance)
+                .map(MCP23017.class::cast)
+                .forEach(this::close);
+        gpioProviders.clear();
+        gpioProviders.put(0, PeripheralManager.getInstance());
+    }
+
+    private void close(AutoCloseable autoCloseable) {
+        try {
+            autoCloseable.close();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Expander can't be closed", e);
+        }
+    }
 }

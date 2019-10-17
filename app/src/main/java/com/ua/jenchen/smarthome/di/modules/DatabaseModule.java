@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.smarthome.database.AppDatabase;
+import com.ua.jenchen.smarthome.database.dao.ExtensionDao;
 import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 
@@ -36,6 +37,13 @@ public class DatabaseModule {
     @Singleton
     public LampStateDao lampStateDao(AppDatabase database) {
         return database.lampStateDao();
+    }
+
+
+    @Provides
+    @Singleton
+    public ExtensionDao extensionDao(AppDatabase database) {
+        return database.extensionDao();
     }
 
     @Provides

@@ -10,7 +10,9 @@ import com.ua.jenchen.smarthome.R;
 import com.ua.jenchen.smarthome.application.SmartHomeApplication;
 import com.ua.jenchen.smarthome.listeners.LampStateValueEventListener;
 import com.ua.jenchen.smarthome.listeners.UpdateStatusListener;
+import com.ua.jenchen.smarthome.managers.AdcManager;
 import com.ua.jenchen.smarthome.managers.GpioManager;
+import com.ua.jenchen.smarthome.services.ExtensionService;
 import com.ua.jenchen.smarthome.services.LampStateService;
 import com.ua.jenchen.smarthome.services.LightConfigurationService;
 
@@ -33,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     UpdateStatusListener statusListener;
     @Inject
     UpdateManager manager;
+    @Inject
+    ExtensionService extensionService;
+    @Inject
+    AdcManager adcManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SmartHomeApplication.appComponent.inject(this);
         manager.addStatusListener(statusListener);
+        initGpioExpanders();
+        initAdc();
         initLight();
+    }
+
+    private void initGpioExpanders() {
+        extensionService.runGpioExpanderConfiguration(this);
+    }
+
+    private void initAdc() {
+        extensionService.runAdcConfiguration(this);
     }
 
     private void initLight() {
@@ -54,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         gpioManager.closeAllGpios();
         manager.removeStatusListener(statusListener);
+        adcManager.close();
         super.onDestroy();
     }
 }

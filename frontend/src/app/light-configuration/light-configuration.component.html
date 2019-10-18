@@ -22,11 +22,12 @@
         </div>
         <mat-card-content>
           <div mat-card-avatar [class.disabled]="!item.state" [class.enabled]="item.state"></div>
-<!--          <span *ngIf="item.state">Увімкненно</span>-->
-<!--          <span *ngIf="!item.state">Вимкненно</span>-->
         </mat-card-content>
         <mat-card-actions>
-          <button mat-stroked-button (click)="changeState(item.uid)">Вимикач</button>
+          <button mat-stroked-button (click)="changeState(item.uid)">
+            <span *ngIf="item.state">Вимкнути</span>
+            <span *ngIf="!item.state">Увімкнути</span>
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>

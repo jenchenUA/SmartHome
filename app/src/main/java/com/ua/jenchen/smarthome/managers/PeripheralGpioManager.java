@@ -15,24 +15,11 @@ public class PeripheralGpioManager {
 
     private static final String LOG_TAG = PeripheralGpioManager.class.getSimpleName();
 
-    private static PeripheralGpioManager instance;
-
     private Map<Integer, Object> gpioProviders;
 
     public PeripheralGpioManager() {
         this.gpioProviders = new ConcurrentHashMap<>();
         gpioProviders.put(0, PeripheralManager.getInstance());
-    }
-
-    public static PeripheralGpioManager getInstance() {
-        if (instance == null) {
-            synchronized (GpioManager.class) {
-                if (instance == null) {
-                    instance = new PeripheralGpioManager();
-                }
-            }
-        }
-        return instance;
     }
 
     public void createGpioProvider(int address) {

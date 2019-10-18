@@ -1,6 +1,7 @@
 package com.ua.jenchen.smarthome.database.dao;
 
 import com.ua.jenchen.models.AppConstants;
+import com.ua.jenchen.models.converters.ExtensionTypeConverter;
 import com.ua.jenchen.models.extensions.Extension;
 import com.ua.jenchen.models.extensions.ExtensionType;
 
@@ -12,8 +13,10 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.TypeConverters;
 
 @Dao
+@TypeConverters({ExtensionTypeConverter.class})
 public interface ExtensionDao {
 
     @Query("SELECT * FROM " + AppConstants.EXTENSION_TABLE_NAME)

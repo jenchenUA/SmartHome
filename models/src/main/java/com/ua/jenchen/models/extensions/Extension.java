@@ -1,19 +1,22 @@
 package com.ua.jenchen.models.extensions;
 
 import com.ua.jenchen.models.AppConstants;
+import com.ua.jenchen.models.converters.ExtensionTypeConverter;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
-@Entity(tableName = AppConstants.LIGHT_STATE_TABLE_NAME,
+@Entity(tableName = AppConstants.EXTENSION_TABLE_NAME,
         indices = {@Index(value = {"type", "address"}, unique = true)})
 public class Extension {
 
     @PrimaryKey
     private int id;
     @ColumnInfo(name = "type")
+    @TypeConverters({ExtensionTypeConverter.class})
     private ExtensionType type;
     @ColumnInfo(name = "address")
     private int address;

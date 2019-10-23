@@ -7,6 +7,7 @@ import {ExtensionDialogComponent} from "./extension-dialog/extension-dialog.comp
 import {MatSnackBar, MatSnackBarRef} from "@angular/material/snack-bar";
 import {WebsocketService} from "../websocket-service/websocket.service";
 import {WS} from "../websocket-service/websocket.events";
+import {RemoveConfirmationDialogComponent} from "../remove-confirmation.dialog/remove-confirmation.dialog.component";
 
 @Component({
   selector: 'app-extensions',
@@ -66,8 +67,12 @@ export class ExtensionsComponent implements OnInit {
   }
 
   onDeleteClick(id: number, i: number) {
-    this.extensionService.deleteExtension(id).subscribe(() => {
-      this.data.splice(i, 1);
+    this.dialog.open(RemoveConfirmationDialogComponent).afterClosed().subscribe(result => {
+      if (result) {
+        this.extensionService.deleteExtension(id).subscribe(() => {
+          this.data.splice(i, 1);
+        });
+      }
     });
   }
 }

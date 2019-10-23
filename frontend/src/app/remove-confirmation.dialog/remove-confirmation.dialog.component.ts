@@ -14,7 +14,7 @@ export class RemoveConfirmationDialogComponent implements OnInit {
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   confirm(): void {

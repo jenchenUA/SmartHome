@@ -3,11 +3,11 @@
     <div *ngFor="let item of data; let i = index" class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
       <mat-card>
         <div class="row">
-          <mat-card-title class="col col-lg-11">
+          <mat-card-title class="col col-lg-10">
             <span *ngIf="ExtensionType.ADC == item.type">АЦП ADS1115</span>
             <span *ngIf="ExtensionType.GPIO == item.type">Розширювач MCP23017</span>
           </mat-card-title>
-          <button class="col-md-1 col-lg" mat-icon-button [matMenuTriggerFor]="menu">
+          <button class="col-md-2 col-lg" mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="before">

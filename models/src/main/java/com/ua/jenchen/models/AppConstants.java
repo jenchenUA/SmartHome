@@ -9,7 +9,7 @@ public class AppConstants {
     public static final String WARM_FLOOR_CONFIGURATION_TABLE_NAME = "warm_floor_configuration";
     public static final String WARM_FLOOR_STATE_TABLE_NAME = "warm_floor_state";
     public static final String GPIO_EXPANDER_CONFIGURATION_TABLE_NAME = "gpio_expander_configuration";
-    public static final String EXTENSION_TABLE_NAME = "extensions";
+    public static final String EXTENSION_TABLE_NAME = "system_extension";
 
     public static final float ROOM_TEMPERATURE = 298.15f;
     public static final float ZERO_TEMPERATURE = 273.15f;

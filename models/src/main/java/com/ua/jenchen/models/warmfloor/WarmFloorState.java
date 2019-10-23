@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
         indices = {@Index(value = "uid", unique = true)})
 public class WarmFloorState {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "uid")
     private String uid;

@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
         indices = @Index(value = "control_pin", unique = true))
 public class WarmFloorConfiguration {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "control_pin")
     private String controlPin;

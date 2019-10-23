@@ -1,5 +1,7 @@
 package com.ua.jenchen.smarthome.server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ua.jenchen.smarthome.application.SmartHomeApplication;
 import com.ua.jenchen.smarthome.server.controllers.ExtensionController;
 import com.ua.jenchen.smarthome.server.controllers.LampStateController;
@@ -18,6 +20,7 @@ import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
 import io.javalin.core.util.CorsPlugin;
 import io.javalin.http.staticfiles.Location;
+import io.javalin.plugin.json.JavalinJson;
 
 import static io.javalin.apibuilder.ApiBuilder.delete;
 import static io.javalin.apibuilder.ApiBuilder.get;
@@ -52,8 +55,12 @@ public class Server {
     }
 
     public void run() {
+        Gson gson = new GsonBuilder()
+                .create();
         server = Javalin.create(getConfig()).start(port);
         CorsPlugin.forAllOrigins().apply(server);
+        JavalinJson.setFromJsonMapper(gson::fromJson);
+        JavalinJson.setToJsonMapper(gson::toJson);
         server.routes(() -> {
             path("light", () -> {
                 get(lightConfigurationController::getLamps);

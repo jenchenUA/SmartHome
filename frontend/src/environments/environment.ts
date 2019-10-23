@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  baseUrl: "http://192.168.137.254:8080",
+  baseUrl: "http://192.168.137.184:8080",
   // baseUrl: "http://localhost:8080",
-  wsSocketUrl: "ws://" + "192.168.137.254" + ":" + 8080 + "/updates"
+  wsSocketUrl: "ws://" + "192.168.137.184" + ":" + 8080 + "/updates"
 };
 
 /*

@@ -22,13 +22,15 @@ public class PeripheralGpioManager {
         gpioProviders.put(0, PeripheralManager.getInstance());
     }
 
-    public void createGpioProvider(int address) {
+    public boolean createGpioProvider(int address) {
         List<String> i2cBusList = PeripheralManager.getInstance().getI2cBusList();
         try {
             MCP23017 mcp23017 = new MCP23017(i2cBusList.get(0), address);
             gpioProviders.put(address, mcp23017);
+            return true;
         } catch (IOException e) {
             Log.e(LOG_TAG, "GPIO provider can't be created", e);
+            return false;
         }
     }
 

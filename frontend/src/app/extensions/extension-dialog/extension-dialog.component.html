@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Налаштування розширення</h1>
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <mat-label>Тип розширювача</mat-label>
+      <mat-select name="extensionType" [(ngModel)]="data.type" (ngModelChange)="filterExtensions()">
+        <mat-option [value]="ExtensionType.ADC">
+          ADS1115
+        </mat-option>
+        <mat-option [value]="ExtensionType.GPIO">
+          MCP23017
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br/>
+    <mat-form-field>
+      <mat-label>Адреса роширювача</mat-label>
+      <mat-select name="address" [(ngModel)]="data.address">
+        <mat-option *ngFor="let item of selectedExtensions" value="{{item.value}}">{{item.text}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()" color="warn">Відмінити</button>
+  <button mat-button (click)="createExtension()">Створити</button>
+</div>

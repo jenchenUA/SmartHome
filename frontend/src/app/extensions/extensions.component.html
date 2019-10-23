@@ -1,0 +1,33 @@
+<div class="main-div">
+  <div class="row">
+    <div *ngFor="let item of data; let i = index" class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+      <mat-card>
+        <div class="row">
+          <mat-card-title class="col col-lg-11">
+            <span *ngIf="ExtensionType.ADC == item.type">АЦП ADS1115</span>
+            <span *ngIf="ExtensionType.GPIO == item.type">Розширювач MCP23017</span>
+          </mat-card-title>
+          <button class="col-md-1 col-lg" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="onDeleteClick(item.id, i)">
+              <mat-icon>delete</mat-icon>
+              <span>Видалити</span>
+            </button>
+          </mat-menu>
+        </div>
+        <mat-card-content>
+          <div mat-card-avatar [class.disabled]="!item.online" [class.enabled]="item.online"></div>
+          <div>
+            Адреса: {{item.address.toString(2)}}
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+  <app-fab-button (onClick)="openDialog()" [icon]="fabIcon"></app-fab-button>
+</div>

@@ -19,15 +19,18 @@ public class AdcManager {
         converters = new ConcurrentHashMap<>();
     }
 
-    public void createAds1115(int address) {
+    public boolean createAds1115(int address) {
         PeripheralManager peripheralManager = PeripheralManager.getInstance();
         try {
             Ads1xxx driver = new Ads1xxx(peripheralManager.getI2cBusList().get(0), address,
                     Ads1xxx.Configuration.ADS1115);
             driver.setInputRange(Ads1xxx.RANGE_6_144V);
             converters.put(address, driver);
+            Log.i(LOG_TAG, String.format("ADS1115 available on the address %s", address));
+            return true;
         } catch (IOException e) {
             Log.e(LOG_TAG, "ADS1115 can't be created", e);
+            return false;
         }
     }
 

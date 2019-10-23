@@ -52,7 +52,8 @@ public class ServiceModule {
     @Singleton
     @Provides
     public ExtensionService extensionService(ExtensionDao extensionDao, AdcManager adcManager,
-                                             PeripheralGpioManager peripheralGpioManager) {
-        return new ExtensionService(extensionDao, peripheralGpioManager, adcManager);
+                                             PeripheralGpioManager peripheralGpioManager,
+                                             WebSocketService webSocketService) {
+        return new ExtensionService(extensionDao, peripheralGpioManager, adcManager, webSocketService);
     }
 }

@@ -4,13 +4,18 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false" color="primary">
     <mat-toolbar color="primary">
-      <span>Menu</span>
+      <span>Smart Home</span>
     </mat-toolbar>
     <mat-nav-list>
       <mat-divider></mat-divider>
-      <a mat-list-item href="#">
+      <a mat-list-item href="#" (click)="openLight()">
         <mat-icon>emoji_objects</mat-icon>
         <span>Світло</span>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item href="#" (click)="openExtension()">
+        <mat-icon>extension</mat-icon>
+        <span>Розширювачі</span>
       </a>
       <mat-divider></mat-divider>
       <a mat-list-item href="#" (click)="openUpdateDialog()">
@@ -32,11 +37,13 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Smart Home</span>
+      <span *ngIf="showLight">Світло</span>
+      <span *ngIf="showExtensions">Розширювачі</span>
     </mat-toolbar>
     <!-- Add Content Here -->
     <div class="basic-container content">
-      <app-light-configuration>Loading...</app-light-configuration>
+      <app-light-configuration *ngIf="showLight">Loading...</app-light-configuration>
+      <app-extensions *ngIf="showExtensions">Loading...</app-extensions>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

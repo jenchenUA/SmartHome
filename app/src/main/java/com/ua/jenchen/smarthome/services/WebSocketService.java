@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -51,5 +52,9 @@ public class WebSocketService {
                 .stream()
                 .filter(context -> context.session.isOpen())
                 .forEach(context -> context.send(message));
+    }
+
+    public void publishAsync(String channel, Message message) {
+        CompletableFuture.runAsync(() -> publish(channel, message));
     }
 }

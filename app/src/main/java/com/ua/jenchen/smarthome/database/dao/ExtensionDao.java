@@ -25,7 +25,7 @@ public interface ExtensionDao {
     @Query("SELECT * FROM " + AppConstants.EXTENSION_TABLE_NAME + " WHERE type = :type")
     LiveData<List<Extension>> getByType(ExtensionType type);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(Extension extension);
 
     @Delete

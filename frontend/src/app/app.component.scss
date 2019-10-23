@@ -15,3 +15,12 @@
 .main-div{
   position: relative;
 }
+
+.disabled {
+  background-size: cover;
+  background-color: red;
+}
+.enabled {
+  background-size: cover;
+  background-color: green;
+}

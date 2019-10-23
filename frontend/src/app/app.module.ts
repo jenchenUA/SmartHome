@@ -10,7 +10,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatButtonModule} from "@angular/material/button";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCardModule} from "@angular/material/card";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {HttpClientModule} from "@angular/common/http";
@@ -28,6 +28,9 @@ import {MatBadgeModule} from "@angular/material/badge";
 import { UpdateDialogComponent } from './system-update/update-dialog/update-dialog.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { ExtensionsComponent } from './extensions/extensions.component';
+import { ExtensionDialogComponent } from './extensions/extension-dialog/extension-dialog.component';
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -37,37 +40,42 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     FabButtonComponent,
     RemoveConfirmationDialogComponent,
     MainNavComponent,
-    UpdateDialogComponent
+    UpdateDialogComponent,
+    ExtensionsComponent,
+    ExtensionDialogComponent
   ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        MatInputModule,
-        MatFormFieldModule,
-        BrowserAnimationsModule,
-        MatListModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatCardModule,
-        MatGridListModule,
-        MatSnackBarModule,
-        HttpClientModule,
-        MatDialogModule,
-        MatIconModule,
-        MatToolbarModule,
-        MatMenuModule,
-        LayoutModule,
-        MatBadgeModule,
-        MatProgressSpinnerModule,
-        MatProgressBarModule
-    ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    BrowserAnimationsModule,
+    MatListModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatCardModule,
+    MatGridListModule,
+    MatSnackBarModule,
+    HttpClientModule,
+    MatDialogModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    LayoutModule,
+    MatBadgeModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatSelectModule,
+    ReactiveFormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
     LightConfigurationDialog,
     RemoveConfirmationDialogComponent,
-    UpdateDialogComponent
+    UpdateDialogComponent,
+    ExtensionDialogComponent
   ]
 })
 export class AppModule {

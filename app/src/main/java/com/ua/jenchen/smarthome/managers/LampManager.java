@@ -16,7 +16,6 @@ import com.ua.jenchen.smarthome.services.WebSocketService;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
@@ -55,10 +54,8 @@ public class LampManager implements AutoCloseable {
     }
 
     private void broadcastEvent(boolean state) {
-        CompletableFuture.runAsync(() -> {
-            Message<LightView> message = new Message<>(Events.LIGHT_STATE.getCode(), new LightView(getUid(), state));
-            socketService.publish(Channels.UPDATES.getCode(), message);
-        });
+        Message<LightView> message = new Message<>(Events.LIGHT_STATE.getCode(), new LightView(getUid(), state));
+        socketService.publishAsync(Channels.UPDATES.getCode(), message);
     }
 
     @Override

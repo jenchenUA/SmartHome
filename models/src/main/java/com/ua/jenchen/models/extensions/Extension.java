@@ -10,16 +10,18 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 @Entity(tableName = AppConstants.EXTENSION_TABLE_NAME,
-        indices = {@Index(value = {"type", "address"}, unique = true)})
+        indices = {@Index(value = {"type", "address"}, unique = true),
+                @Index(value = "address", unique = true)})
 public class Extension {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "type")
     @TypeConverters({ExtensionTypeConverter.class})
     private ExtensionType type;
     @ColumnInfo(name = "address")
     private int address;
+    private boolean online;
 
     public int getId() {
         return id;
@@ -43,5 +45,13 @@ public class Extension {
 
     public void setAddress(int address) {
         this.address = address;
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 }

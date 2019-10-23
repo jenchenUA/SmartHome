@@ -8,7 +8,7 @@ public class ExtensionTypeConverter {
 
     @TypeConverter
     public String fromExtensionType(ExtensionType extensionType) {
-        return extensionType.name();
+        return extensionType.toString();
     }
 
     @TypeConverter

@@ -27,6 +27,9 @@ export class MainNavComponent implements OnInit {
   updateData: UpdateModel = new UpdateModel();
   private updateDialogRef: MatDialogRef<UpdateDialogComponent>;
 
+  showLight: boolean = true;
+  showExtensions: boolean = false;
+
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
@@ -82,5 +85,15 @@ export class MainNavComponent implements OnInit {
 
   openUpdateDialog(): void {
     this.updateDialogRef = this.dialog.open(UpdateDialogComponent, {data: this.updateData, width: "500px"});
+  }
+
+  openExtension(): void {
+    this.showLight = false;
+    this.showExtensions = true;
+  }
+
+  openLight(): void {
+    this.showLight = true;
+    this.showExtensions = false;
   }
 }

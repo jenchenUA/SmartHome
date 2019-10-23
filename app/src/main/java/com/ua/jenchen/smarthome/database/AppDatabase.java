@@ -10,7 +10,7 @@ import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(exportSchema = false, entities = {LightConfiguration.class, LampState.class, Extension.class}, version = 3)
+@Database(exportSchema = false, entities = {LightConfiguration.class, LampState.class, Extension.class}, version = 10)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract LightConfigurationDao lightConfigurationDao();

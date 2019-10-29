@@ -34,7 +34,17 @@ public class ExtensionService {
     }
 
     public List<Extension> getAllExtensions() {
-        return extensionDao.getAll();
+        List<Extension> extensions = extensionDao.getAll();
+        extensions.forEach(this::isOnline);
+        return extensions;
+    }
+
+    private void isOnline(Extension extension) {
+        if (extension.getType() == ExtensionType.ADC) {
+            extension.setOnline(adcManager.isAds1115Configured(extension.getAddress()));
+        } else if (extension.getType() == ExtensionType.GPIO) {
+            extension.setOnline(gpioManager.isProviderExists(extension.getAddress()));
+        }
     }
 
     public void create(Extension extension) {

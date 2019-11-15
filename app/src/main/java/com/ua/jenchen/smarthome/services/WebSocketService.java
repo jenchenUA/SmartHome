@@ -46,7 +46,7 @@ public class WebSocketService {
     }
 
     public void publish(String channel, Message message) {
-        Log.i(LOG_TAG, String.format("Sending message: %s, to channel: %s", message, channel));
+        Log.d(LOG_TAG, String.format("Sending message: %s, to channel: %s", message, channel));
         Optional.ofNullable(subscribers.get(channel))
                 .orElseGet(Collections::emptySet)
                 .stream()

@@ -15,6 +15,9 @@ import com.ua.jenchen.smarthome.managers.GpioManager;
 import com.ua.jenchen.smarthome.services.ExtensionService;
 import com.ua.jenchen.smarthome.services.LampStateService;
 import com.ua.jenchen.smarthome.services.LightConfigurationService;
+import com.ua.jenchen.smarthome.services.WarmFloorService;
+
+import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     ExtensionService extensionService;
     @Inject
     AdcManager adcManager;
+    @Inject
+    WarmFloorService warmFloorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +51,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SmartHomeApplication.appComponent.inject(this);
         manager.addStatusListener(statusListener);
+
+        CompletableFuture.runAsync(() -> {
+            extensionService.initGpioExpanderConfigurations();
+            extensionService.initAdcConfigurations();
+            warmFloorService.disableAllWarmFloorManagers();
+        }).join();
         initGpioExpanders();
         initAdc();
         initLight();
+        initWarmFloor();
     }
 
     private void initGpioExpanders() {
@@ -64,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference reference = firebaseDatabase.getReference(AppConstants.LIGHT_STATE_TABLE_NAME);
         reference.addValueEventListener(new LampStateValueEventListener());
         lightConfigurationService.runSavedConfigurations(this);
+    }
+
+    private void initWarmFloor() {
+        warmFloorService.runAllConfigurations(this);
     }
 
     @Override

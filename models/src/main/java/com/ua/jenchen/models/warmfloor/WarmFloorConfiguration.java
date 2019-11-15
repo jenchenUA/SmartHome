@@ -8,19 +8,20 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = AppConstants.WARM_FLOOR_CONFIGURATION_TABLE_NAME,
-        indices = @Index(value = "control_pin", unique = true))
+        indices = {@Index(value = {"control_pin", "button_pin", "gpio_address"}, unique = true),
+                @Index(value = {"channel", "adc_address"}, unique = true)})
 public class WarmFloorConfiguration {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "control_pin")
     private String controlPin;
-    @ColumnInfo(name = "switcher")
-    private String swircherPin;
+    @ColumnInfo(name = "button_pin")
+    private String switcherPin;
     @ColumnInfo(name = "b")
     private float bOfThermoresistor;
     @ColumnInfo(name = "thermoresistor")
-    private float resistanceOfThresmoresistor;
+    private float resistanceOfThermoresistor;
     @ColumnInfo(name = "support_resistor")
     private float resistanceOfSupportResistor;
     @ColumnInfo(name = "voltage")
@@ -29,12 +30,16 @@ public class WarmFloorConfiguration {
     private int channel;
     @ColumnInfo(name = "measures")
     private int countOfMeasures;
-    @ColumnInfo(name = "control_pin_high_activation")
-    private boolean isControlPinHighActivation;
     @ColumnInfo(name = "label")
     private String label;
     @ColumnInfo(name = "gpio_address")
     private int gpioAddress;
+    @ColumnInfo(name = "adc_address")
+    private int adcAddress;
+    @ColumnInfo(name = "uid")
+    private String uid;
+    @ColumnInfo(name = "threshold")
+    private float threshold;
 
     public WarmFloorConfiguration() {
     }
@@ -48,7 +53,11 @@ public class WarmFloorConfiguration {
     }
 
     public String getUid() {
-        return this.swircherPin + this.controlPin;
+        return this.switcherPin + this.controlPin;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getControlPin() {
@@ -59,28 +68,28 @@ public class WarmFloorConfiguration {
         this.controlPin = controlPin;
     }
 
-    public String getSwircherPin() {
-        return swircherPin;
+    public String getSwitcherPin() {
+        return switcherPin;
     }
 
-    public void setSwircherPin(String swircherPin) {
-        this.swircherPin = swircherPin;
+    public void setSwitcherPin(String switcherPin) {
+        this.switcherPin = switcherPin;
     }
 
     public float getBOfThermoresistor() {
         return bOfThermoresistor;
     }
 
-    public void setbOfThermoresistor(float bOfThermoresistor) {
+    public void setBOfThermoresistor(float bOfThermoresistor) {
         this.bOfThermoresistor = bOfThermoresistor;
     }
 
-    public float getResistanceOfThresmoresistor() {
-        return resistanceOfThresmoresistor;
+    public float getResistanceOfThermoresistor() {
+        return resistanceOfThermoresistor;
     }
 
-    public void setResistanceOfThresmoresistor(float resistanceOfThresmoresistor) {
-        this.resistanceOfThresmoresistor = resistanceOfThresmoresistor;
+    public void setResistanceOfThermoresistor(float resistanceOfThermoresistor) {
+        this.resistanceOfThermoresistor = resistanceOfThermoresistor;
     }
 
     public float getResistanceOfSupportResistor() {
@@ -115,14 +124,6 @@ public class WarmFloorConfiguration {
         this.countOfMeasures = countOfMeasures;
     }
 
-    public boolean isControlPinHighActivation() {
-        return isControlPinHighActivation;
-    }
-
-    public void setControlPinHighActivation(boolean controlPinHighActivation) {
-        isControlPinHighActivation = controlPinHighActivation;
-    }
-
     public String getLabel() {
         return label;
     }
@@ -137,5 +138,21 @@ public class WarmFloorConfiguration {
 
     public void setGpioAddress(int gpioAddress) {
         this.gpioAddress = gpioAddress;
+    }
+
+    public int getAdcAddress() {
+        return adcAddress;
+    }
+
+    public void setAdcAddress(int adcAddress) {
+        this.adcAddress = adcAddress;
+    }
+
+    public float getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(float threshold) {
+        this.threshold = threshold;
     }
 }

@@ -69,7 +69,6 @@ public class LampManager implements AutoCloseable {
         return configuration.getLabel();
     }
 
-
     public List<Gpio> releaseGpios() {
         button.unregisterCallback();
         disable(controlPin);

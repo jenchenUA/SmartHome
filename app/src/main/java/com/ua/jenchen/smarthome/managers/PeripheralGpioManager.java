@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PeripheralGpioManager {
@@ -32,6 +33,10 @@ public class PeripheralGpioManager {
             Log.e(LOG_TAG, "GPIO provider can't be created", e);
             return false;
         }
+    }
+
+    public Set<Integer> getAvailableProviders() {
+        return gpioProviders.keySet();
     }
 
     public boolean isProviderExists(int address) {

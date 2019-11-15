@@ -14,7 +14,9 @@ import com.ua.jenchen.smarthome.listeners.LightButtonListener;
 import com.ua.jenchen.smarthome.listeners.WarmFloorConfigurationValueListener;
 import com.ua.jenchen.smarthome.listeners.WarmFloorStateValueListener;
 import com.ua.jenchen.smarthome.managers.LampManager;
+import com.ua.jenchen.smarthome.managers.WarmFloorManager;
 import com.ua.jenchen.smarthome.server.Server;
+import com.ua.jenchen.smarthome.workers.WarmFloorListener;
 
 import javax.inject.Singleton;
 
@@ -44,6 +46,10 @@ public interface AppComponent {
     void inject(LightButtonListener lightButtonListener);
 
     void inject(LampManager lampManager);
+
+    void inject(WarmFloorManager warmFloorManager);
+
+    void inject(WarmFloorListener warmFloorListener);
 
     @Component.Builder
     interface Builder {

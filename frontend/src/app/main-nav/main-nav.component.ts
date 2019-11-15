@@ -25,6 +25,7 @@ export class MainNavComponent implements OnInit {
   ws: WebSocket;
   baseUrl = environment.baseUrl;
   updateData: UpdateModel = new UpdateModel();
+  title: string;
   private updateDialogRef: MatDialogRef<UpdateDialogComponent>;
 
   showLight: boolean = true;
@@ -88,12 +89,14 @@ export class MainNavComponent implements OnInit {
   }
 
   openExtension(): void {
-    this.showLight = false;
-    this.showExtensions = true;
+    this.title = "Розширювачі";
   }
 
   openLight(): void {
-    this.showLight = true;
-    this.showExtensions = false;
+    this.title = "Світло";
+  }
+
+  openWarmFloor(): void {
+    this.title = "Тепла підлога";
   }
 }

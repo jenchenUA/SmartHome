@@ -12,19 +12,27 @@ export class ExtensionService {
 
   constructor(private http: HttpClient) { }
 
-  create(extension: Extension) {
+  public create(extension: Extension) {
     const options = {};
     let body = JSON.stringify(extension);
     return this.http.post(this.baseUrl + "/extension", body, options);
   }
 
-  getAllExtensions() {
+  public getAllExtensions() {
     const options = {};
     return this.http.get(this.baseUrl + "/extension", options)
   }
 
-  deleteExtension(uid: number) {
+  public deleteExtension(uid: number) {
     const options = {};
     return this.http.delete(this.baseUrl + "/extension/" + uid, options)
+  }
+
+  public getOnlineAdcs() {
+    return this.http.get(this.baseUrl + "/extension/adc/online", {});
+  }
+
+  public getOnlineGpioProviders() {
+    return this.http.get(this.baseUrl + "/extension/gpio/online", {});
   }
 }

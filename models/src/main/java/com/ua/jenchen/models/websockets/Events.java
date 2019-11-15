@@ -4,7 +4,8 @@ public enum Events {
 
     SYSTEM_UPDATE("system_update"),
     LIGHT_STATE("light"),
-    EXTENSIONS("extensions");
+    EXTENSIONS("extensions"),
+    WARM_FLOOR("warm_floor");
 
     private String code;
 

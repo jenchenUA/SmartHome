@@ -1,12 +1,11 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-
 export const environment = {
   production: false,
-  baseUrl: "http://192.168.137.184:8080",
+  baseUrl: "http://192.168.137.80:8080",
   // baseUrl: "http://localhost:8080",
-  wsSocketUrl: "ws://" + "192.168.137.184" + ":" + 8080 + "/updates"
+  wsSocketUrl: "ws://192.168.137.80:" + 8080 + "/updates"
 };
 
 /*

@@ -10,6 +10,7 @@ import com.ua.jenchen.smarthome.managers.AdcManager;
 import com.ua.jenchen.smarthome.managers.PeripheralGpioManager;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -56,7 +57,7 @@ public class ExtensionService {
     }
 
     public void runAdcConfiguration(AppCompatActivity activity) {
-        extensionDao.getByType(ExtensionType.ADC).observe(activity, configurations -> {
+        extensionDao.getByTypeAsLiveData(ExtensionType.ADC).observe(activity, configurations -> {
             configurations.stream()
                     .filter(configuration -> !adcManager.isAds1115Configured(configuration.getAddress()))
                     .forEach(this::createAdc);
@@ -64,13 +65,53 @@ public class ExtensionService {
         });
     }
 
+    public void initAdcConfigurations() {
+        extensionDao.getByType(ExtensionType.ADC).stream()
+                .filter(configuration -> !adcManager.isAds1115Configured(configuration.getAddress()))
+                .forEach(this::createAdc);
+    }
+
     public void runGpioExpanderConfiguration(AppCompatActivity activity) {
-        extensionDao.getByType(ExtensionType.GPIO).observe(activity, configurations -> {
+        extensionDao.getByTypeAsLiveData(ExtensionType.GPIO).observe(activity, configurations -> {
             configurations.stream()
                 .filter(configuration -> !gpioManager.isProviderExists(configuration.getAddress()))
                 .forEach(this::createGpioProvider);
             isGpioProviderInited = true;
         });
+    }
+
+    public void initGpioExpanderConfigurations() {
+        extensionDao.getByType(ExtensionType.GPIO).stream()
+                .filter(configuration -> !gpioManager.isProviderExists(configuration.getAddress()))
+                .forEach(this::createGpioProvider);
+    }
+
+    public List<Extension> getAvailableAdc() {
+        return adcManager.getOnlineAdcs().stream()
+                .map(this::adcAddressToExtension)
+                .collect(Collectors.toList());
+    }
+
+    public List<Extension> getAvailableGpioProviders() {
+        return gpioManager.getAvailableProviders().stream()
+                .map(this::gpioProviderAddressToExtension)
+                .collect(Collectors.toList());
+    }
+
+    private Extension gpioProviderAddressToExtension(Integer address) {
+        Extension result = new Extension();
+        result.setAddress(address);
+        result.setType(ExtensionType.GPIO);
+        result.setOnline(true);
+        return result;
+    }
+
+    private Extension adcAddressToExtension(Integer address) {
+        Extension result = new Extension();
+        result.setAddress(address);
+        result.setOnline(true);
+        result.setType(ExtensionType.ADC);
+        return result;
     }
 
     private void createAdc(Extension configuration) {
@@ -91,4 +132,5 @@ public class ExtensionService {
         Message<Extension> message = new Message<>(Events.EXTENSIONS.getCode(), configuration);
         webSocketService.publishAsync(Channels.UPDATES.getCode(), message);
     }
+
 }

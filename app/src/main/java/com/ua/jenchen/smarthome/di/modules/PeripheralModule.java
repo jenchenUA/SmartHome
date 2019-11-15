@@ -3,6 +3,7 @@ package com.ua.jenchen.smarthome.di.modules;
 import com.ua.jenchen.smarthome.managers.AdcManager;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 import com.ua.jenchen.smarthome.managers.PeripheralGpioManager;
+import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import javax.inject.Singleton;
 
@@ -20,8 +21,8 @@ public class PeripheralModule {
 
     @Provides
     @Singleton
-    public GpioManager gpioManager(PeripheralGpioManager manager) {
-        return new GpioManager(manager);
+    public GpioManager gpioManager(PeripheralGpioManager manager, WebSocketService webSocketService) {
+        return new GpioManager(manager, webSocketService);
     }
 
     @Provides

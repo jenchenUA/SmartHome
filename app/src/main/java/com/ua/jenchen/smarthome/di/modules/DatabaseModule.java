@@ -7,6 +7,8 @@ import com.ua.jenchen.smarthome.database.AppDatabase;
 import com.ua.jenchen.smarthome.database.dao.ExtensionDao;
 import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
+import com.ua.jenchen.smarthome.database.dao.WarmFloorDao;
+import com.ua.jenchen.smarthome.database.dao.WarmFloorStateDao;
 
 import javax.inject.Singleton;
 
@@ -44,6 +46,18 @@ public class DatabaseModule {
     @Singleton
     public ExtensionDao extensionDao(AppDatabase database) {
         return database.extensionDao();
+    }
+
+    @Provides
+    @Singleton
+    public WarmFloorDao warmFloorDao(AppDatabase database) {
+        return database.warmFloorDao();
+    }
+
+    @Provides
+    @Singleton
+    public WarmFloorStateDao warmFloorStateDao(AppDatabase database) {
+        return database.warmFloorStateDao();
     }
 
     @Provides

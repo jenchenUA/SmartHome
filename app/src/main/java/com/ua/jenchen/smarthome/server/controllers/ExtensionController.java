@@ -35,4 +35,14 @@ public class ExtensionController {
         extensionService.removeById(id);
         request.status(HttpCodes.CREATED);
     }
+
+    public void getAvailableAdc(Context request) {
+        request.json(extensionService.getAvailableAdc());
+        request.status(HttpCodes.OK);
+    }
+
+    public void getAvailableGpioProviders(Context request) {
+        request.json(extensionService.getAvailableGpioProviders());
+        request.status(HttpCodes.OK);
+    }
 }

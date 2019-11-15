@@ -7,6 +7,7 @@ import com.ua.jenchen.smarthome.server.controllers.ExtensionController;
 import com.ua.jenchen.smarthome.server.controllers.LampStateController;
 import com.ua.jenchen.smarthome.server.controllers.LightConfigurationController;
 import com.ua.jenchen.smarthome.server.controllers.SystemUpdateController;
+import com.ua.jenchen.smarthome.server.controllers.WarmFloorController;
 import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,8 @@ public class Server {
     WebSocketService webSocketService;
     @Inject
     ExtensionController extensionController;
+    @Inject
+    WarmFloorController warmFloorController;
 
     public Server(int port) {
         SmartHomeApplication.appComponent.inject(this);
@@ -85,6 +88,25 @@ public class Server {
                 post(extensionController::createExtension);
                 path(":uid", () -> {
                     delete(extensionController::deleteExtension);
+                });
+                path("adc/online", () -> {
+                    get(extensionController::getAvailableAdc);
+                });
+                path("gpio/online", () -> {
+                    get(extensionController::getAvailableGpioProviders);
+                });
+            });
+            path("warm-floor", () -> {
+                path(":uid", () -> {
+                    put("/state", warmFloorController::changeState);
+                    put("temperature/:value", warmFloorController::changeTemperature);
+                });
+                path("views", () -> {
+                    get(warmFloorController::getViews);
+                });
+                path("configuration", () -> {
+                    post(warmFloorController::create);
+                    delete(":uid", warmFloorController::delete);
                 });
             });
         });

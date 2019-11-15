@@ -5,6 +5,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ua.jenchen.smarthome.database.dao.ExtensionDao;
 import com.ua.jenchen.smarthome.database.dao.LampStateDao;
 import com.ua.jenchen.smarthome.database.dao.LightConfigurationDao;
+import com.ua.jenchen.smarthome.database.dao.WarmFloorDao;
+import com.ua.jenchen.smarthome.database.dao.WarmFloorStateDao;
 import com.ua.jenchen.smarthome.managers.AdcManager;
 import com.ua.jenchen.smarthome.managers.GpioManager;
 import com.ua.jenchen.smarthome.managers.PeripheralGpioManager;
@@ -12,6 +14,7 @@ import com.ua.jenchen.smarthome.services.ExtensionService;
 import com.ua.jenchen.smarthome.services.LampStateService;
 import com.ua.jenchen.smarthome.services.LightConfigurationService;
 import com.ua.jenchen.smarthome.services.SystemUpdateService;
+import com.ua.jenchen.smarthome.services.WarmFloorService;
 import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import javax.inject.Singleton;
@@ -55,5 +58,12 @@ public class ServiceModule {
                                              PeripheralGpioManager peripheralGpioManager,
                                              WebSocketService webSocketService) {
         return new ExtensionService(extensionDao, peripheralGpioManager, adcManager, webSocketService);
+    }
+
+    @Singleton
+    @Provides
+    public WarmFloorService warmFloorService(WarmFloorDao warmFloorDao, GpioManager gpioManager,
+                                             WebSocketService webSocketService, WarmFloorStateDao warmFloorStateDao) {
+        return new WarmFloorService(warmFloorDao, gpioManager, webSocketService, warmFloorStateDao);
     }
 }

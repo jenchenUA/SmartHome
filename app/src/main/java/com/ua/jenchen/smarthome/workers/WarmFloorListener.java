@@ -56,4 +56,8 @@ public class WarmFloorListener extends AsyncTask<Void, Void, Void> {
     public void shutdown() {
         this.shutdown = true;
     }
+
+    public boolean isExecuted() {
+        return !this.shutdown;
+    }
 }

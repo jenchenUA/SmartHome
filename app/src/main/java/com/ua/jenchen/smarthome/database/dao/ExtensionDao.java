@@ -23,7 +23,10 @@ public interface ExtensionDao {
     List<Extension> getAll();
 
     @Query("SELECT * FROM " + AppConstants.EXTENSION_TABLE_NAME + " WHERE type = :type")
-    LiveData<List<Extension>> getByType(ExtensionType type);
+    LiveData<List<Extension>> getByTypeAsLiveData(ExtensionType type);
+
+    @Query("SELECT * FROM " + AppConstants.EXTENSION_TABLE_NAME + " WHERE type = :type")
+    List<Extension> getByType(ExtensionType type);
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(Extension extension);

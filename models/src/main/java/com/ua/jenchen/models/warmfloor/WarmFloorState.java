@@ -17,8 +17,6 @@ public class WarmFloorState {
     private String uid;
     @ColumnInfo(name = "state")
     private boolean state;
-    @ColumnInfo(name = "temperature")
-    private float temperature;
 
     public int getId() {
         return id;
@@ -42,13 +40,5 @@ public class WarmFloorState {
 
     public void setState(boolean state) {
         this.state = state;
-    }
-
-    public float getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(float temperature) {
-        this.temperature = temperature;
     }
 }

@@ -31,6 +31,17 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { ExtensionsComponent } from './extensions/extensions.component';
 import { ExtensionDialogComponent } from './extensions/extension-dialog/extension-dialog.component';
 import {MatSelectModule} from "@angular/material/select";
+import { WarmFloorComponent } from './warm-floor/warm-floor.component';
+import { WarmFloorConfigurationDialogComponent } from './warm-floor/warm-floor-configuration-dialog/warm-floor-configuration-dialog.component';
+import { RouterModule, Routes } from '@angular/router';
+import {MatSliderModule} from "@angular/material/slider";
+import {SevenSegModule} from "ng-sevenseg";
+
+const appRoutes: Routes = [
+  { path: 'warm-floor-board', component: WarmFloorComponent },
+  { path: 'light-board', component: LightConfigurationComponent },
+  { path: 'extension-board', component: ExtensionsComponent }
+];
 
 @NgModule({
   declarations: [
@@ -42,40 +53,49 @@ import {MatSelectModule} from "@angular/material/select";
     MainNavComponent,
     UpdateDialogComponent,
     ExtensionsComponent,
-    ExtensionDialogComponent
+    ExtensionDialogComponent,
+    WarmFloorComponent,
+    WarmFloorConfigurationDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    BrowserAnimationsModule,
-    MatListModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatCardModule,
-    MatGridListModule,
-    MatSnackBarModule,
-    HttpClientModule,
-    MatDialogModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatMenuModule,
-    LayoutModule,
-    MatBadgeModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    MatSelectModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule,
+        MatListModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatCardModule,
+        MatGridListModule,
+        MatSnackBarModule,
+        HttpClientModule,
+        MatDialogModule,
+        MatIconModule,
+        MatToolbarModule,
+        MatMenuModule,
+        LayoutModule,
+        MatBadgeModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        RouterModule.forRoot(
+            appRoutes
+        ),
+        MatSliderModule,
+        SevenSegModule,
+        FlexLayoutModule
+    ],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
     LightConfigurationDialog,
     RemoveConfirmationDialogComponent,
     UpdateDialogComponent,
-    ExtensionDialogComponent
+    ExtensionDialogComponent,
+    WarmFloorConfigurationDialogComponent
   ]
 })
 export class AppModule {

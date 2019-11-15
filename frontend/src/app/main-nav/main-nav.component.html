@@ -8,17 +8,22 @@
     </mat-toolbar>
     <mat-nav-list>
       <mat-divider></mat-divider>
-      <a mat-list-item href="#" (click)="openLight()">
+      <a mat-list-item routerLink="/light-board" (click)="openLight()" routerLinkActive="active">
         <mat-icon>emoji_objects</mat-icon>
         <span>Світло</span>
       </a>
       <mat-divider></mat-divider>
-      <a mat-list-item href="#" (click)="openExtension()">
+      <a mat-list-item routerLink="/warm-floor-board" (click)="openWarmFloor()" routerLinkActive="active">
+        <mat-icon>waves</mat-icon>
+        <span>Тепла підлога</span>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/extension-board" (click)="openExtension()" routerLinkActive="active">
         <mat-icon>extension</mat-icon>
         <span>Розширювачі</span>
       </a>
       <mat-divider></mat-divider>
-      <a mat-list-item href="#" (click)="openUpdateDialog()">
+      <a mat-list-item (click)="openUpdateDialog()">
         <mat-icon matBadge="!" matBadgeColor="warn" matBadgePosition="before" [matBadgeHidden]="!updateBadgeVisible">
           system_update
         </mat-icon>
@@ -37,13 +42,11 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span *ngIf="showLight">Світло</span>
-      <span *ngIf="showExtensions">Розширювачі</span>
+      <span>{{title}}</span>
     </mat-toolbar>
     <!-- Add Content Here -->
     <div class="basic-container content">
-      <app-light-configuration *ngIf="showLight">Loading...</app-light-configuration>
-      <app-extensions *ngIf="showExtensions">Loading...</app-extensions>
+      <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

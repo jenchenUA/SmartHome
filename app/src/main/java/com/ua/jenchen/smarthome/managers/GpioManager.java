@@ -8,6 +8,11 @@ import com.ua.jenchen.drivers.mcp23017.MCP23017;
 import com.ua.jenchen.drivers.mcp23017.MCP23017GPIO;
 import com.ua.jenchen.models.light.LightConfiguration;
 import com.ua.jenchen.models.warmfloor.WarmFloorConfiguration;
+import com.ua.jenchen.models.warmfloor.WarmFloorView;
+import com.ua.jenchen.models.websockets.Channels;
+import com.ua.jenchen.models.websockets.Events;
+import com.ua.jenchen.models.websockets.Message;
+import com.ua.jenchen.smarthome.services.WebSocketService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import androidx.annotation.Nullable;
 
@@ -28,13 +36,16 @@ public class GpioManager {
     private PeripheralManager peripheralManager;
     private PeripheralGpioManager peripheralGpioManager;
     private Map<String, Gpio> unusedGpios;
+    private WebSocketService webSocketService;
+    private WarmFloorEventSender warmFloorEventSender;
 
-    public GpioManager(PeripheralGpioManager manager) {
+    public GpioManager(PeripheralGpioManager manager, WebSocketService webSocketService) {
         peripheralManager = PeripheralManager.getInstance();
         peripheralGpioManager = manager;
         lampManagers = new ConcurrentHashMap<>();
         floorManagers = new ConcurrentHashMap<>();
         unusedGpios = new ConcurrentHashMap<>();
+        this.webSocketService = webSocketService;
     }
 
     public Optional<Gpio> getGpio(String name) {
@@ -112,16 +123,36 @@ public class GpioManager {
         });
     }
 
-    public Optional<WarmFloorManager> makeWarmFloorManager(WarmFloorConfiguration configuration) {
-        Optional<WarmFloorManager> result = Optional.empty();
-        Gpio buttonPin = openGpio(configuration.getSwircherPin(), configuration.getGpioAddress());
+    public void destroyWarmFloorManager(String uid) {
+        Optional.ofNullable(floorManagers.get(uid)).ifPresent(manager -> {
+            floorManagers.remove(uid);
+            manager.releaseGpios().forEach(gpio -> unusedGpios.put(gpio.getName(), gpio));
+            Log.i(LOG_TAG,
+                    String.format("Lamp manager with uid: %s and label: %s was destroyed", uid, manager.getLabel()));
+            if (floorManagers.isEmpty()) {
+                warmFloorEventSender.shutdown();
+                warmFloorEventSender = null;
+            }
+        });
+    }
+
+    public boolean makeWarmFloorManager(WarmFloorConfiguration configuration) {
+        Gpio buttonPin = openGpio(configuration.getSwitcherPin(), configuration.getGpioAddress());
         Gpio controlPin = openGpio(configuration.getControlPin(), configuration.getGpioAddress());
         if (buttonPin != null && controlPin != null) {
-            WarmFloorManager manager = new WarmFloorManager(controlPin, buttonPin, configuration);
-            floorManagers.put(configuration.getUid(), manager);
-            result = Optional.of(manager);
+            try {
+                WarmFloorManager manager = new WarmFloorManager(controlPin, buttonPin, configuration);
+                floorManagers.put(configuration.getUid(), manager);
+                if (warmFloorEventSender == null) {
+                    warmFloorEventSender = new WarmFloorEventSender();
+                    CompletableFuture.runAsync(warmFloorEventSender);
+                }
+                return true;
+            } catch (IllegalStateException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+            }
         }
-        return result;
+        return false;
     }
 
     public List<LampManager> getLampManagers() {
@@ -132,12 +163,16 @@ public class GpioManager {
         return lampManagers.get(uid);
     }
 
-    public WarmFloorManager getWarmFloorManager(String uid) {
-        return floorManagers.get(uid);
+    public Optional<WarmFloorManager> getWarmFloorManager(String uid) {
+        return Optional.ofNullable(floorManagers.get(uid));
     }
 
     public boolean isNotManagerExist(String uid) {
         return !lampManagers.containsKey(uid) && !floorManagers.containsKey(uid);
+    }
+
+    public boolean isWarmFloorManagerExist(String uid) {
+        return floorManagers.containsKey(uid);
     }
 
     public void closeAllGpios() {
@@ -154,6 +189,31 @@ public class GpioManager {
             closeable.close();
         } catch (Exception e) {
             Log.e(LOG_TAG, "Can't be closed object: " + closeable);
+        }
+    }
+
+    private class WarmFloorEventSender implements Runnable {
+
+        private boolean shutdown = false;
+
+        @Override
+        public void run() {
+            while (!shutdown) {
+                List<WarmFloorView> views = floorManagers.values().stream()
+                        .map(WarmFloorManager::toView)
+                        .collect(Collectors.toList());
+                Message<List<WarmFloorView>> message = new Message<>(Events.WARM_FLOOR.getCode(), views);
+                webSocketService.publish(Channels.UPDATES.getCode(), message);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                }
+            }
+        }
+
+        public void shutdown() {
+            this.shutdown = true;
         }
     }
 }

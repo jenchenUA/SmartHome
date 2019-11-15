@@ -4,10 +4,12 @@ import com.ua.jenchen.smarthome.server.controllers.ExtensionController;
 import com.ua.jenchen.smarthome.server.controllers.LampStateController;
 import com.ua.jenchen.smarthome.server.controllers.LightConfigurationController;
 import com.ua.jenchen.smarthome.server.controllers.SystemUpdateController;
+import com.ua.jenchen.smarthome.server.controllers.WarmFloorController;
 import com.ua.jenchen.smarthome.services.ExtensionService;
 import com.ua.jenchen.smarthome.services.LampStateService;
 import com.ua.jenchen.smarthome.services.LightConfigurationService;
 import com.ua.jenchen.smarthome.services.SystemUpdateService;
+import com.ua.jenchen.smarthome.services.WarmFloorService;
 
 import javax.inject.Singleton;
 
@@ -39,5 +41,11 @@ public class ServerModule {
     @Singleton
     public ExtensionController extensionController(ExtensionService extensionService) {
         return new ExtensionController(extensionService);
+    }
+
+    @Provides
+    @Singleton
+    public WarmFloorController warmFloorController(WarmFloorService warmFloorService) {
+        return new WarmFloorController(warmFloorService);
     }
 }

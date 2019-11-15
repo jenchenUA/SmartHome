@@ -1,0 +1,57 @@
+<div class="main-div">
+  <div fxLayout="row wrap">
+    <div *ngFor="let item of data; let i = index" fxFlex="33.3%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="50%">
+      <mat-card [class.offline]="!item.online">
+        <div fxLayout="row wrap">
+          <mat-card-title fxFlex="93%">
+            <span>{{item.label}}</span>
+          </mat-card-title>
+          <button fxFlex="7%" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="onDeleteClick(item.uid, i)">
+              <mat-icon>delete</mat-icon>
+              <span>Видалити</span>
+            </button>
+          </mat-menu>
+        </div>
+        <mat-card-content>
+
+          <div fxLayout="row wrap">
+            <div fxFlex="50%">
+              <div fxLayout="row wrap">
+                <span fxFlex="60%" fxFlexAlign="center">Нагрівання:</span>
+                <div fxFlex="10%" class="circle" [class.disabled]="!item.warmingEnabled" [class.enabled]="item.warmingEnabled"></div>
+                <div fxFlex="30%"></div>
+              </div>
+              <div fxLayout="row wrap">
+                <span fxFlex="60%" fxFlexAlign="center">Увімкнено:</span>
+                <div fxFlex="10%" class="circle" [class.disabled]="!item.enabled" [class.enabled]="item.enabled"></div>
+                <div fxFlex="30%"></div>
+              </div>
+            </div>
+            <div fxFlex="50%">
+              <span>Температура підлоги</span>
+              <h1 class="temperature-text">{{formatTemperature(item.currentTemperature)}} °C</h1>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxFlexAlign="center">
+            <span>Темпетура нагрівання</span>
+            <mat-slider fxFlex="80%" thumbLabel [displayWith]="formatLabel" [(ngModel)]="item.threshold"
+                        step="0.5" min="10" max="40" (change)="setThreshold(item.uid, $event)"
+                        (input)="item.threshold = $event.value"></mat-slider>
+            <h3 fxFlex="20%">{{item.threshold}} °C</h3>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-stroked-button (click)="changeState(item.uid)">
+            <span *ngIf="item.enabled">Вимкнути</span>
+            <span *ngIf="!item.enabled">Увімкнути</span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+  <app-fab-button (onClick)="openDialog()" [icon]="fabIcon"></app-fab-button>
+</div>

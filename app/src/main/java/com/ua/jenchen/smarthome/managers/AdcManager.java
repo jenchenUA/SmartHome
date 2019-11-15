@@ -7,6 +7,7 @@ import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AdcManager {
@@ -53,5 +54,9 @@ public class AdcManager {
         } catch (Exception e) {
             Log.e(LOG_TAG, "ADS1115 can't be closed", e);
         }
+    }
+
+    public Set<Integer> getOnlineAdcs() {
+        return converters.keySet();
     }
 }
